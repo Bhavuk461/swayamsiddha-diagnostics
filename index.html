@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Swayamsiddha Diagnostics — Fully Automated Lab &amp; DR Digital X-Ray</title>
+<meta name="description" content="Swayamsiddha Diagnostics is a fully automated pathology laboratory and DR digital X-ray centre. Blood, urine, stool, thyroid and diabetes testing, digital ECG and same-day reports. Call +91 78478 89009.">
+<meta name="theme-color" content="#04331A">
+<link rel="canonical" href="https://bhavuk461.github.io/swayamsiddha-diagnostics/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Swayamsiddha Diagnostics">
+<meta property="og:title" content="Swayamsiddha Diagnostics — Lab &amp; X-Ray">
+<meta property="og:description" content="Fully automated pathology laboratory and DR digital X-ray. Accurate diagnosis, trusted care. Same-day reports. Call +91 78478 89009.">
+<meta property="og:url" content="https://bhavuk461.github.io/swayamsiddha-diagnostics/">
+<meta property="og:image" content="https://bhavuk461.github.io/swayamsiddha-diagnostics/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/logo.jpeg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="assets/img/exterior-2.jpeg" fetchpriority="high">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Oriya:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ─────────────────────────── vector mark (traced from the logo) ─────────────────────────── -->
+<svg class="u-sprite" aria-hidden="true" focusable="false"><defs>
+  <path id="ssd-petal" d="M100 59C104.4 48 108.1 33.5 110.8 22C111.3 15 106.3 7 100 2.8C93.7 7 88.7 15 89.2 22C91.9 33.5 95.6 48 100 59Z"/>
+  <path id="ssd-crown" fill-rule="evenodd" d="M69.8 93.2C71.2 99 73.1 105.4 74.6 111.2C75.4 114.9 76.2 118 76.5 121C79.5 123.7 84.5 125.4 91 125.7C97 126 103 126 109 125.7C115.5 125.4 120.5 123.7 123.5 121C123.8 118 124.6 114.9 125.4 111.2C126.9 105.4 128.8 99 130.2 93.2C126.8 94.6 122.6 96.6 118.5 99.5C118.4 94.4 117.7 88.9 116.7 84C113.9 87.4 110 91.4 106.5 94.8C104.9 90.4 102.6 85 100 80.6C97.4 85 95.1 90.4 93.5 94.8C90 91.4 86.1 87.4 83.3 84C82.3 88.9 81.6 94.4 81.5 99.5C77.4 96.6 73.2 94.6 69.8 93.2ZM85.2 119.6a14.8 2.3 0 1 0 29.6 0a14.8 2.3 0 1 0-29.6 0Z"/>
+  <g id="ssd-pearls">
+    <circle cx="100" cy="75" r="4.5"/>
+    <circle cx="81.5" cy="80" r="3.8"/><circle cx="118.5" cy="80" r="3.8"/>
+    <circle cx="67.3" cy="90.4" r="2.55"/><circle cx="132.7" cy="90.4" r="2.55"/>
+  </g>
+  <g id="ssd-mark">
+    <use href="#ssd-petal" transform="rotate(0 100 100)"/><use href="#ssd-petal" transform="rotate(20 100 100)"/>
+    <use href="#ssd-petal" transform="rotate(40 100 100)"/><use href="#ssd-petal" transform="rotate(60 100 100)"/>
+    <use href="#ssd-petal" transform="rotate(80 100 100)"/><use href="#ssd-petal" transform="rotate(100 100 100)"/>
+    <use href="#ssd-petal" transform="rotate(120 100 100)"/><use href="#ssd-petal" transform="rotate(140 100 100)"/>
+    <use href="#ssd-petal" transform="rotate(160 100 100)"/><use href="#ssd-petal" transform="rotate(180 100 100)"/>
+    <use href="#ssd-petal" transform="rotate(200 100 100)"/><use href="#ssd-petal" transform="rotate(220 100 100)"/>
+    <use href="#ssd-petal" transform="rotate(240 100 100)"/><use href="#ssd-petal" transform="rotate(260 100 100)"/>
+    <use href="#ssd-petal" transform="rotate(280 100 100)"/><use href="#ssd-petal" transform="rotate(300 100 100)"/>
+    <use href="#ssd-petal" transform="rotate(320 100 100)"/><use href="#ssd-petal" transform="rotate(340 100 100)"/>
+    <use href="#ssd-crown"/><use href="#ssd-pearls"/>
+  </g>
+</defs></svg>
+
+<!-- ─────────────────────────── boot animation ─────────────────────────── -->
+<div class="boot" id="boot" role="status" aria-label="Loading Swayamsiddha Diagnostics">
+  <div class="boot__stage">
+    <svg class="boot__mark" viewBox="0 0 200 200" aria-hidden="true">
+      <g fill="currentColor">
+        <g transform="rotate(0 100 100)"><use class="b-petal" style="--i:0" href="#ssd-petal"/></g>
+        <g transform="rotate(20 100 100)"><use class="b-petal" style="--i:1" href="#ssd-petal"/></g>
+        <g transform="rotate(40 100 100)"><use class="b-petal" style="--i:2" href="#ssd-petal"/></g>
+        <g transform="rotate(60 100 100)"><use class="b-petal" style="--i:3" href="#ssd-petal"/></g>
+        <g transform="rotate(80 100 100)"><use class="b-petal" style="--i:4" href="#ssd-petal"/></g>
+        <g transform="rotate(100 100 100)"><use class="b-petal" style="--i:5" href="#ssd-petal"/></g>
+        <g transform="rotate(120 100 100)"><use class="b-petal" style="--i:6" href="#ssd-petal"/></g>
+        <g transform="rotate(140 100 100)"><use class="b-petal" style="--i:7" href="#ssd-petal"/></g>
+        <g transform="rotate(160 100 100)"><use class="b-petal" style="--i:8" href="#ssd-petal"/></g>
+        <g transform="rotate(180 100 100)"><use class="b-petal" style="--i:9" href="#ssd-petal"/></g>
+        <g transform="rotate(200 100 100)"><use class="b-petal" style="--i:8" href="#ssd-petal"/></g>
+        <g transform="rotate(220 100 100)"><use class="b-petal" style="--i:7" href="#ssd-petal"/></g>
+        <g transform="rotate(240 100 100)"><use class="b-petal" style="--i:6" href="#ssd-petal"/></g>
+        <g transform="rotate(260 100 100)"><use class="b-petal" style="--i:5" href="#ssd-petal"/></g>
+        <g transform="rotate(280 100 100)"><use class="b-petal" style="--i:4" href="#ssd-petal"/></g>
+        <g transform="rotate(300 100 100)"><use class="b-petal" style="--i:3" href="#ssd-petal"/></g>
+        <g transform="rotate(320 100 100)"><use class="b-petal" style="--i:2" href="#ssd-petal"/></g>
+        <g transform="rotate(340 100 100)"><use class="b-petal" style="--i:1" href="#ssd-petal"/></g>
+        <use class="b-crown" href="#ssd-crown"/>
+        <circle class="b-pearl" style="--i:0" cx="100" cy="75" r="4.5"/>
+        <circle class="b-pearl" style="--i:1" cx="81.5" cy="80" r="3.8"/>
+        <circle class="b-pearl" style="--i:1" cx="118.5" cy="80" r="3.8"/>
+        <circle class="b-pearl" style="--i:2" cx="67.3" cy="90.4" r="2.55"/>
+        <circle class="b-pearl" style="--i:2" cx="132.7" cy="90.4" r="2.55"/>
+      </g>
+    </svg>
+    <p class="boot__word"><span>S</span><span>W</span><span>A</span><span>Y</span><span>A</span><span>M</span><span>S</span><span>I</span><span>D</span><span>D</span><span>H</span><span>A</span></p>
+    <p class="boot__sub">Diagnostics · Lab &amp; X-Ray</p>
+  </div>
+</div>
+
+<!-- ─────────────────────────── header ─────────────────────────── -->
+<header class="nav" id="nav">
+  <div class="shell nav__inner">
+    <a class="brand" href="#top" aria-label="Swayamsiddha Diagnostics, home">
+      <svg class="brand__mark" viewBox="0 0 200 200" aria-hidden="true"><use href="#ssd-mark"/></svg>
+      <span class="brand__text">
+        <span class="brand__name">Swayamsiddha</span>
+        <span class="brand__kind">Diagnostics · Lab &amp; X-Ray</span>
+      </span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#tests">Tests</a>
+      <a href="#technology">Technology</a>
+      <a href="#home-collection">Home Collection</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#visit">Visit Us</a>
+    </nav>
+
+    <div class="nav__cta">
+      <a class="btn btn--sm btn--ghost" href="https://wa.me/917847889009" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn btn--sm btn--solid" href="tel:+917847889009">Call now</a>
+    </div>
+
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile" id="mobile-menu" hidden>
+  <nav class="mobile__links" aria-label="Mobile">
+    <a href="#tests"><em>01</em> Tests</a>
+    <a href="#technology"><em>02</em> Technology</a>
+    <a href="#home-collection"><em>03</em> Home Collection</a>
+    <a href="#gallery"><em>04</em> Gallery</a>
+    <a href="#visit"><em>05</em> Visit Us</a>
+  </nav>
+  <div class="mobile__foot">
+    <a class="btn btn--solid btn--block" href="tel:+917847889009">Call +91 78478 89009</a>
+    <a class="btn btn--ghost btn--block" href="https://wa.me/917847889009" target="_blank" rel="noopener">Message on WhatsApp</a>
+  </div>
+</div>
+
+<main id="main">
+<span id="top"></span>
+
+<!-- ─────────────────────────── hero ─────────────────────────── -->
+<section class="hero">
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="shell hero__grid">
+
+    <div class="hero__copy">
+      <p class="eyebrow reveal">Fully automated laboratory · DR digital X-ray</p>
+      <h1 class="hero__title reveal" style="--d:1">
+        Accurate&nbsp;diagnosis.<br>
+        <em>Trusted&nbsp;care.</em>
+      </h1>
+      <p class="hero__lede reveal" style="--d:2">
+        A modern pathology lab and direct digital X-ray centre built around automated
+        analyzers — so your report reads the same whoever is on shift. Precise results,
+        delivered the same day, at prices that make sense.
+      </p>
+      <p class="hero__odia reveal" style="--d:3" lang="or">ସ୍ୱୟଂସିଦ୍ଧା ଡାଇଗ୍ନୋଷ୍ଟିକ୍</p>
+
+      <div class="hero__actions reveal" style="--d:4">
+        <a class="btn btn--solid btn--lg" href="tel:+917847889009">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone"/></svg>
+          Call +91 78478 89009
+        </a>
+        <a class="btn btn--ghost btn--lg" href="https://wa.me/917847889009" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>
+          WhatsApp us
+        </a>
+      </div>
+
+      <ul class="hero__chips reveal" style="--d:5">
+        <li>Same-day reports</li>
+        <li>Automated analyzers</li>
+        <li>Home collection nearby</li>
+      </ul>
+    </div>
+
+    <figure class="hero__media reveal" style="--d:3">
+      <div class="hero__frame">
+        <img src="assets/img/exterior-2.jpeg" width="1155" height="1280"
+             alt="Swayamsiddha Diagnostics shopfront with its Lab &amp; X-Ray signboard on opening day"
+             fetchpriority="high" decoding="async">
+      </div>
+      <figcaption class="hero__badge">
+        <span class="hero__badge-k">Now open</span>
+        <span class="hero__badge-v">Lab &amp; DR X-Ray under one roof</span>
+      </figcaption>
+    </figure>
+
+  </div>
+</section>
+
+<!-- ─────────────────────────── marquee ─────────────────────────── -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    <span>Erba EM 200 clinical chemistry</span><i>✦</i>
+    <span>200 photometric tests / hour</span><i>✦</i>
+    <span>Erba H560 · 5-part differential CBC</span><i>✦</i>
+    <span>DR flat-panel digital X-ray</span><i>✦</i>
+    <span>Automated fluorescence immunoassay</span><i>✦</i>
+    <span>Digital 12-lead ECG</span><i>✦</i>
+    <span>Same-day reporting</span><i>✦</i>
+    <span>Erba EM 200 clinical chemistry</span><i>✦</i>
+    <span>200 photometric tests / hour</span><i>✦</i>
+    <span>Erba H560 · 5-part differential CBC</span><i>✦</i>
+    <span>DR flat-panel digital X-ray</span><i>✦</i>
+    <span>Automated fluorescence immunoassay</span><i>✦</i>
+    <span>Digital 12-lead ECG</span><i>✦</i>
+    <span>Same-day reporting</span><i>✦</i>
+  </div>
+</div>
+
+<!-- ─────────────────────────── about ─────────────────────────── -->
+<section class="about" id="about">
+  <div class="shell about__grid">
+    <div class="about__head">
+      <p class="eyebrow reveal"><em>01</em> About the centre</p>
+      <h2 class="h2 reveal" style="--d:1">Precision you can check.<br>Care you can feel.</h2>
+    </div>
+    <div class="about__body">
+      <p class="lede reveal" style="--d:1">
+        Swayamsiddha Diagnostics was set up on a simple idea: a small town deserves the same
+        instrument quality a city hospital runs on. Every routine parameter here is measured on a
+        closed, automated analyzer — the sample goes in, the machine pipettes, incubates, reads and
+        prints. Fewer hands on the sample means fewer chances to get it wrong.
+      </p>
+      <ul class="about__points reveal" style="--d:2">
+        <li><strong>Automation first</strong><span>Chemistry, haematology and immunoassay all run on closed automated systems with on-board quality control.</span></li>
+        <li><strong>DR, not CR</strong><span>Our X-ray uses a direct flat-panel detector — the image appears in seconds, at a lower radiation dose.</span></li>
+        <li><strong>Reports that travel</strong><span>Collect in person or get a copy on WhatsApp. Most routine reports are ready the same day.</span></li>
+        <li><strong>Straight pricing</strong><span>Rates are told upfront at the counter. No package you did not ask for.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── tests ─────────────────────────── -->
+<section class="tests" id="tests">
+  <div class="shell">
+    <div class="sec-head">
+      <p class="eyebrow reveal"><em>02</em> What we test</p>
+      <h2 class="h2 reveal" style="--d:1">A full pathology menu,<br>plus X-ray and ECG.</h2>
+      <p class="sec-head__note reveal" style="--d:2" lang="or">ଏଠାରେ ରକ୍ତ, ମଳ, ମୂତ୍ର, ଧାତୁ, କଫ, ଗର୍ଭ ଇତ୍ୟାଦି ପରୀକ୍ଷା କରାଯାଏ।</p>
+    </div>
+
+    <div class="tests__grid">
+      <article class="tcard reveal">
+        <header><span class="tcard__ico"><svg viewBox="0 0 24 24"><use href="#i-drop"/></svg></span><h3>Haematology</h3></header>
+        <ul>
+          <li>Complete Blood Count (CBC) with 5-part differential</li>
+          <li>ESR · Peripheral smear</li>
+          <li>Blood grouping &amp; Rh typing</li>
+          <li>Malaria — smear &amp; rapid antigen</li>
+          <li>Absolute eosinophil count</li>
+          <li>Bleeding time · Clotting time</li>
+        </ul>
+      </article>
+
+      <article class="tcard reveal" style="--d:1">
+        <header><span class="tcard__ico"><svg viewBox="0 0 24 24"><use href="#i-flask"/></svg></span><h3>Biochemistry</h3></header>
+        <ul>
+          <li>Liver Function Test (LFT)</li>
+          <li>Kidney Function Test (KFT / RFT)</li>
+          <li>Lipid profile</li>
+          <li>Serum electrolytes — Na⁺, K⁺, Cl⁻</li>
+          <li>Uric acid · Calcium · Total protein</li>
+          <li>Amylase · Lipase · Bilirubin</li>
+        </ul>
+      </article>
+
+      <article class="tcard reveal" style="--d:2">
+        <header><span class="tcard__ico"><svg viewBox="0 0 24 24"><use href="#i-thyroid"/></svg></span><h3>Thyroid &amp; hormones</h3></header>
+        <ul>
+          <li>T3 · T4 · TSH</li>
+          <li>Free T3 · Free T4</li>
+          <li>Anti-TPO antibody</li>
+          <li>Beta-hCG — pregnancy, quantitative</li>
+          <li>Vitamin D (25-OH)</li>
+          <li>Full thyroid profile, reported same day</li>
+        </ul>
+      </article>
+
+      <article class="tcard reveal" style="--d:3">
+        <header><span class="tcard__ico"><svg viewBox="0 0 24 24"><use href="#i-sugar"/></svg></span><h3>Diabetes</h3></header>
+        <ul>
+          <li>Fasting blood sugar (FBS)</li>
+          <li>Post-prandial blood sugar (PPBS)</li>
+          <li>Random blood sugar (RBS)</li>
+          <li>HbA1c — 3-month average</li>
+          <li>Glucose tolerance test (GTT)</li>
+          <li>Urine sugar &amp; ketones</li>
+        </ul>
+      </article>
+
+      <article class="tcard reveal" style="--d:4">
+        <header><span class="tcard__ico"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg></span><h3>Serology &amp; infection</h3></header>
+        <ul>
+          <li>Widal · Typhoid rapid</li>
+          <li>Dengue NS1, IgM, IgG</li>
+          <li>CRP · RA factor · ASO titre</li>
+          <li>HIV · HBsAg · HCV screening</li>
+          <li>VDRL</li>
+          <li>Fever profile panel</li>
+        </ul>
+      </article>
+
+      <article class="tcard reveal" style="--d:5">
+        <header><span class="tcard__ico"><svg viewBox="0 0 24 24"><use href="#i-beaker"/></svg></span><h3>Urine, stool &amp; more</h3></header>
+        <ul>
+          <li>Urine routine &amp; microscopy</li>
+          <li>Urine pregnancy test</li>
+          <li>Urine albumin &amp; sugar</li>
+          <li>Stool routine &amp; microscopy</li>
+          <li>Stool occult blood</li>
+          <li>Semen analysis · Sputum examination</li>
+        </ul>
+      </article>
+
+      <article class="tcard tcard--wide reveal" style="--d:6">
+        <header><span class="tcard__ico"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg></span><h3>Cardiac &amp; imaging</h3></header>
+        <ul>
+          <li>Digital 12-lead ECG</li>
+          <li>DR digital X-ray — chest, spine, limbs, skull, abdomen</li>
+          <li>Pre-employment &amp; fitness X-ray</li>
+        </ul>
+      </article>
+
+      <article class="tcard tcard--wide reveal" style="--d:7">
+        <header><span class="tcard__ico"><svg viewBox="0 0 24 24"><use href="#i-clipboard"/></svg></span><h3>Health packages</h3></header>
+        <ul>
+          <li>Full body health checkup</li>
+          <li>Diabetic care profile</li>
+          <li>Antenatal profile</li>
+          <li>Pre-employment screening</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="tests__foot reveal">
+      <p class="tests__more">
+        Looking for something not listed? Most routine pathology is available here —
+        <a href="tel:+917847889009">call us</a> and we will tell you straight away.
+      </p>
+      <aside class="notice">
+        <h4>Not available at this centre</h4>
+        <p><strong>MRI</strong>, <strong>Ultrasound / USG</strong> and <strong>CT scan</strong> are not done here. We would rather tell you now than have you travel for nothing.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── technology ─────────────────────────── -->
+<section class="tech" id="technology">
+  <div class="shell">
+    <div class="sec-head sec-head--light">
+      <p class="eyebrow reveal"><em>03</em> The equipment</p>
+      <h2 class="h2 reveal" style="--d:1">Every routine test here runs<br>on an automated analyzer.</h2>
+      <p class="sec-head__note reveal" style="--d:2">
+        Automation is not a slogan for us — it is why two samples from the same patient give the
+        same number. Here is exactly what is on our bench.
+      </p>
+    </div>
+
+    <div class="rig reveal">
+      <div class="rig__media"><img src="assets/img/lab-2.jpeg" width="1280" height="960" loading="lazy" decoding="async" alt="Erba EM 200 automated clinical chemistry analyzer on the laboratory bench"></div>
+      <div class="rig__body">
+        <p class="rig__kicker">Clinical chemistry</p>
+        <h3 class="rig__name">Erba Mannheim <em>EM 200</em></h3>
+        <p class="rig__role">Fully automated, random-access, discrete clinical chemistry analyzer. It handles the liver, kidney, lipid and sugar panels end to end.</p>
+        <dl class="specs">
+          <div><dt>Throughput</dt><dd>200 photometric tests/hour · up to 400 with ISE</dd></div>
+          <div><dt>Electrolytes</dt><dd>4-channel ISE — Na⁺, K⁺, Cl⁻, Li⁺</dd></div>
+          <div><dt>Reaction volume</dt><dd>180 µL — less sample per test</dd></div>
+          <div><dt>Sample types</dt><dd>Serum, plasma, urine, CSF and body fluids</dd></div>
+          <div><dt>Automation</dt><dd>Auto-dilution, auto-rerun, STAT priority, on-board reagent cooling</dd></div>
+          <div><dt>Quality control</dt><dd>Levey–Jennings plots with multi-rule QC</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="rig rig--flip reveal">
+      <div class="rig__media"><img src="assets/img/lab-3.jpeg" width="1280" height="960" loading="lazy" decoding="async" alt="Erba H560 five-part haematology analyzer beside the reporting station"></div>
+      <div class="rig__body">
+        <p class="rig__kicker">Haematology</p>
+        <h3 class="rig__name">Erba <em>H560</em></h3>
+        <p class="rig__role">Fully automated 5-part differential haematology analyzer — the machine behind every CBC we report.</p>
+        <dl class="specs">
+          <div><dt>Parameters</dt><dd>32 measured · 26 reportable, with histograms and scattergrams</dd></div>
+          <div><dt>Differential</dt><dd>3-angle laser flow cytometry for the 5-part WBC differential</dd></div>
+          <div><dt>Counting</dt><dd>Electrical impedance for RBC, WBC and platelets</dd></div>
+          <div><dt>Haemoglobin</dt><dd>Cyanide-free colorimetry — safer chemistry</dd></div>
+          <div><dt>Sample volume</dt><dd>15 µL whole blood · 20 µL capillary — kind to children</dd></div>
+          <div><dt>Throughput</dt><dd>60 samples/hour, 50,000-sample memory</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="rig reveal">
+      <div class="rig__media"><img src="assets/img/lab-1.jpeg" width="1280" height="911" loading="lazy" decoding="async" alt="Automated analyzers and the reporting workstation inside the laboratory"></div>
+      <div class="rig__body">
+        <p class="rig__kicker">Immunoassay</p>
+        <h3 class="rig__name">Automated fluorescence <em>immunoassay</em></h3>
+        <p class="rig__role">Our AFT-900 quantitative fluorescence immunoassay system reads hormone and marker levels directly, instead of a technician eyeballing a colour change.</p>
+        <dl class="specs">
+          <div><dt>Method</dt><dd>Quantitative immunofluorescence with a calibrated reader</dd></div>
+          <div><dt>Reports</dt><dd>Thyroid profile, Beta-hCG, Vitamin D and related markers</dd></div>
+          <div><dt>Turnaround</dt><dd>Minutes per assay — thyroid results the same visit</dd></div>
+          <div><dt>Consistency</dt><dd>Lot-calibrated cartridges; no visual interpretation</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="rig rig--flip reveal">
+      <div class="rig__media rig__media--xray">
+        <img src="assets/img/exterior-1.jpeg" width="1280" height="793" loading="lazy" decoding="async" alt="The laboratory and X-ray wing of Swayamsiddha Diagnostics">
+      </div>
+      <div class="rig__body">
+        <p class="rig__kicker">Radiology</p>
+        <h3 class="rig__name">DR <em>digital X-ray</em></h3>
+        <p class="rig__role">Direct radiography with a flat-panel detector. No cassette, no plate to carry to a scanner — the exposure lands straight on the detector and the image is on screen in seconds.</p>
+        <dl class="specs">
+          <div><dt>Detector</dt><dd>Direct flat-panel — no cassette handling or plate erasing</dd></div>
+          <div><dt>Radiation dose</dt><dd>Lower than CR at equal image quality, thanks to far higher X-ray conversion efficiency</dd></div>
+          <div><dt>Speed</dt><dd>Image available within seconds of exposure</dd></div>
+          <div><dt>Post-processing</dt><dd>Windowing, zoom and contrast adjustment on the digital image</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="vs reveal">
+      <h3 class="vs__title">Why we insisted on DR over CR</h3>
+      <p class="vs__lede">Both are “digital X-ray”, and plenty of centres let you assume they are the same thing. They are not.</p>
+      <div class="vs__cols">
+        <div class="vs__col vs__col--old">
+          <p class="vs__tag">CR — computed radiography</p>
+          <ul>
+            <li>Exposure is stored on a cassette plate</li>
+            <li>The plate is carried to a reader and scanned</li>
+            <li>Image appears after the scan and erase cycle</li>
+            <li>X-ray conversion efficiency of roughly 20–35%</li>
+            <li>A repeat means the whole cassette cycle again</li>
+          </ul>
+        </div>
+        <div class="vs__col vs__col--new">
+          <p class="vs__tag">DR — what we run</p>
+          <ul>
+            <li>Exposure is captured by the flat-panel detector itself</li>
+            <li>Nothing to carry, scan or erase</li>
+            <li>Image on screen in seconds</li>
+            <li>Conversion efficiency well beyond CR — so a lower dose</li>
+            <li>A repeat view takes seconds, not minutes</li>
+          </ul>
+        </div>
+      </div>
+      <p class="vs__note">Lower dose and fewer retakes matter most for the people we X-ray most often — children, pregnant patients and the elderly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── home collection ─────────────────────────── -->
+<section class="home" id="home-collection">
+  <div class="shell home__grid">
+    <div class="home__copy">
+      <p class="eyebrow reveal"><em>04</em> Home sample collection</p>
+      <h2 class="h2 reveal" style="--d:1">If getting here is the hard part,<br>we will come to you.</h2>
+      <p class="lede reveal" style="--d:2">
+        We collect samples at home for people who genuinely cannot travel — elderly patients,
+        bedridden patients, and anyone medically unable to make the trip. It is a small team,
+        so we keep this service close to the centre rather than promise a district-wide radius
+        we cannot honour.
+      </p>
+
+      <ul class="home__rules reveal" style="--d:3">
+        <li><span class="home__n">01</span><div><strong>Who it is for</strong><p>Elderly, bedridden and medically incapable patients. Attendants are welcome to call on their behalf.</p></div></li>
+        <li><span class="home__n">02</span><div><strong>Where we cover</strong><p>Areas near the centre only. Call first — we will confirm honestly whether your locality is within reach.</p></div></li>
+        <li><span class="home__n">03</span><div><strong>How to book</strong><p>Call or message on WhatsApp with the patient's name, area and the tests advised. We will fix a slot.</p></div></li>
+      </ul>
+
+      <div class="home__actions reveal" style="--d:4">
+        <a class="btn btn--solid btn--lg" href="https://wa.me/917847889009?text=Hello%2C%20I%20would%20like%20to%20book%20a%20home%20sample%20collection." target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>
+          Book on WhatsApp
+        </a>
+        <a class="btn btn--ghost btn--lg" href="tel:+917847889009">Call the centre</a>
+      </div>
+    </div>
+
+    <figure class="home__media reveal" style="--d:3">
+      <img src="assets/img/interior-1.jpeg" width="1280" height="999" loading="lazy" decoding="async" alt="The reception area of Swayamsiddha Diagnostics">
+    </figure>
+  </div>
+</section>
+
+<!-- ─────────────────────────── gallery ─────────────────────────── -->
+<section class="gal" id="gallery">
+  <div class="shell">
+    <div class="sec-head">
+      <p class="eyebrow reveal"><em>05</em> Inside the centre</p>
+      <h2 class="h2 reveal" style="--d:1">Have a look before you come.</h2>
+    </div>
+  </div>
+  <div class="shell gal__grid">
+    <button class="gal__item gal__item--tall reveal" data-full="assets/img/exterior-2.jpeg" data-cap="The centre on opening day">
+      <img src="assets/img/exterior-2.jpeg" width="1155" height="1280" loading="lazy" decoding="async" alt="Shopfront of Swayamsiddha Diagnostics decorated for its opening">
+      <span class="gal__cap">The centre</span>
+    </button>
+    <button class="gal__item reveal" style="--d:1" data-full="assets/img/interior-1.jpeg" data-cap="Reception, opening day">
+      <img src="assets/img/interior-1.jpeg" width="1280" height="999" loading="lazy" decoding="async" alt="Reception area decorated with marigold garlands">
+      <span class="gal__cap">Reception</span>
+    </button>
+    <button class="gal__item reveal" style="--d:2" data-full="assets/img/exterior-1.jpeg" data-cap="Lab &amp; X-ray wing">
+      <img src="assets/img/exterior-1.jpeg" width="1280" height="793" loading="lazy" decoding="async" alt="Glass front of the laboratory and X-ray wing">
+      <span class="gal__cap">Lab &amp; X-ray</span>
+    </button>
+    <button class="gal__item reveal" style="--d:3" data-full="assets/img/lab-1.jpeg" data-cap="Reporting station and analyzers">
+      <img src="assets/img/lab-1.jpeg" width="1280" height="911" loading="lazy" decoding="async" alt="Reporting workstation with analyzers and printer">
+      <span class="gal__cap">Reporting desk</span>
+    </button>
+    <button class="gal__item gal__item--wide reveal" style="--d:4" data-full="assets/img/lab-3.jpeg" data-cap="The automated analyzer bench">
+      <img src="assets/img/lab-3.jpeg" width="1280" height="960" loading="lazy" decoding="async" alt="Bench of automated laboratory analyzers">
+      <span class="gal__cap">Analyzer bench</span>
+    </button>
+    <button class="gal__item reveal" style="--d:5" data-full="assets/img/lab-2.jpeg" data-cap="Chemistry and haematology analyzers">
+      <img src="assets/img/lab-2.jpeg" width="1280" height="960" loading="lazy" decoding="async" alt="Clinical chemistry and haematology analyzers side by side">
+      <span class="gal__cap">Analyzers</span>
+    </button>
+  </div>
+</section>
+
+<!-- ─────────────────────────── visit ─────────────────────────── -->
+<section class="visit" id="visit">
+  <div class="shell">
+    <div class="sec-head sec-head--light">
+      <p class="eyebrow reveal"><em>06</em> Visit us</p>
+      <h2 class="h2 reveal" style="--d:1">Walk in, or call ahead.<br>Either works.</h2>
+    </div>
+
+    <div class="visit__grid">
+      <div class="visit__panel reveal">
+        <ul class="info">
+          <li>
+            <span class="info__ico"><svg viewBox="0 0 24 24"><use href="#i-phone"/></svg></span>
+            <div><h4>Phone &amp; WhatsApp</h4><a href="tel:+917847889009">+91 78478 89009</a><p>Same number for calls and WhatsApp.</p></div>
+          </li>
+          <li>
+            <span class="info__ico"><svg viewBox="0 0 24 24"><use href="#i-mail"/></svg></span>
+            <div><h4>Email</h4><a href="mailto:swayamsiddha999@yahoo.com">swayamsiddha999@yahoo.com</a><p>For reports and general enquiries.</p></div>
+          </li>
+          <li>
+            <span class="info__ico"><svg viewBox="0 0 24 24"><use href="#i-clock"/></svg></span>
+            <div><h4>Opening hours</h4>
+              <p class="info__hours"><b>Mon – Sat</b> 7:00 AM – 8:00 PM</p>
+              <p class="info__hours"><b>Sunday</b> 7:00 AM – 1:00 PM</p>
+            </div>
+          </li>
+          <li>
+            <span class="info__ico"><svg viewBox="0 0 24 24"><use href="#i-pin"/></svg></span>
+            <div><h4>Find us</h4>
+              <p id="address-line">Swayamsiddha Diagnostics — Lab &amp; X-Ray, Odisha</p>
+              <a class="info__link" href="https://maps.google.com/?q=Swayamsiddha+Diagnostics" target="_blank" rel="noopener">Open in Google Maps →</a>
+            </div>
+          </li>
+        </ul>
+
+        <div class="visit__cta">
+          <a class="btn btn--solid btn--block" href="tel:+917847889009">Call the centre</a>
+          <a class="btn btn--ghost btn--block" href="https://wa.me/917847889009" target="_blank" rel="noopener">Message on WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="visit__map reveal" style="--d:1">
+        <div class="map" id="map">
+          <button class="map__load" id="map-load" type="button">
+            <span class="map__pin"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg></span>
+            <span class="map__label">Load the map</span>
+            <span class="map__hint">Opens Google Maps inside this page</span>
+          </button>
+        </div>
+        <div class="map__actions">
+          <a class="btn btn--sm btn--ghost" href="https://maps.google.com/?q=Swayamsiddha+Diagnostics" target="_blank" rel="noopener">Open in Google Maps</a>
+          <a class="btn btn--sm btn--ghost" href="https://www.google.com/maps/dir/?api=1&destination=Swayamsiddha+Diagnostics" target="_blank" rel="noopener">Get directions</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ─────────────────────────── footer ─────────────────────────── -->
+<footer class="foot">
+  <div class="shell">
+    <div class="foot__top">
+      <div class="foot__brand">
+        <svg class="foot__mark" viewBox="0 0 200 200" aria-hidden="true"><use href="#ssd-mark"/></svg>
+        <p class="foot__name">Swayamsiddha Diagnostics</p>
+        <p class="foot__odia" lang="or">ସ୍ୱୟଂସିଦ୍ଧା ଡାଇଗ୍ନୋଷ୍ଟିକ୍</p>
+        <p class="foot__tag">Accurate diagnosis. Trusted care.</p>
+      </div>
+
+      <nav class="foot__nav" aria-label="Footer">
+        <h5>Explore</h5>
+        <a href="#about">About</a>
+        <a href="#tests">Tests</a>
+        <a href="#technology">Technology</a>
+        <a href="#home-collection">Home collection</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#visit">Visit us</a>
+      </nav>
+
+      <div class="foot__contact">
+        <h5>Reach us</h5>
+        <a href="tel:+917847889009">+91 78478 89009</a>
+        <a href="https://wa.me/917847889009" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:swayamsiddha999@yahoo.com">swayamsiddha999@yahoo.com</a>
+        <p>Mon–Sat 7:00 AM – 8:00 PM<br>Sunday 7:00 AM – 1:00 PM</p>
+      </div>
+    </div>
+
+    <p class="foot__disclaimer">
+      Information on this site describes the services and equipment available at Swayamsiddha
+      Diagnostics. It is not medical advice. Please consult a qualified doctor to interpret any
+      test result. MRI, ultrasound and CT are not performed at this centre.
+    </p>
+
+    <div class="foot__bar">
+      <p>© <span id="year">2026</span> Swayamsiddha Diagnostics</p>
+      <p>Lab &amp; X-Ray · Odisha, India</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ─────────────────────────── quick actions ─────────────────────────── -->
+<div class="dock" id="dock">
+  <a class="dock__btn dock__btn--call" href="tel:+917847889009" data-tip="Call">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone"/></svg><span>Call</span>
+  </a>
+  <a class="dock__btn dock__btn--wa" href="https://wa.me/917847889009" target="_blank" rel="noopener" data-tip="WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp</span>
+  </a>
+  <a class="dock__btn dock__btn--mail" href="mailto:swayamsiddha999@yahoo.com" data-tip="Email">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"/></svg><span>Email</span>
+  </a>
+  <a class="dock__btn dock__btn--map" href="https://maps.google.com/?q=Swayamsiddha+Diagnostics" target="_blank" rel="noopener" data-tip="Directions">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg><span>Map</span>
+  </a>
+</div>
+
+<!-- ─────────────────────────── lightbox ─────────────────────────── -->
+<dialog class="lb" id="lightbox" aria-label="Photo viewer">
+  <button class="lb__close" id="lb-close" aria-label="Close">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+  <button class="lb__nav lb__nav--prev" id="lb-prev" aria-label="Previous photo"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="lb__nav lb__nav--next" id="lb-next" aria-label="Next photo"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <figure class="lb__fig"><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
+</dialog>
+
+<!-- ─────────────────────────── icons ─────────────────────────── -->
+<svg class="u-sprite" aria-hidden="true" focusable="false"><defs>
+  <g id="i-phone" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.6 3.5h2.2l1.4 3.6-1.8 1.3a11.6 11.6 0 0 0 5.2 5.2l1.3-1.8 3.6 1.4v2.2a2.1 2.1 0 0 1-2.3 2.1A15.6 15.6 0 0 1 4.5 5.8a2.1 2.1 0 0 1 2.1-2.3Z"/>
+  </g>
+  <g id="i-wa" fill="currentColor">
+    <path d="M12 2.2A9.7 9.7 0 0 0 3.6 16.8L2.3 21.7l5-1.3A9.7 9.7 0 1 0 12 2.2Zm0 1.8a7.9 7.9 0 1 1-4.1 14.6l-.3-.2-2.9.8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4Zm-3.3 4c-.2 0-.5.1-.7.4-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.7 2.7 4.2 3.7 2 .8 2.5.7 2.9.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.6-.3-1.5-.7c-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6.5 6.5 0 0 1-1.9-1.2 7.2 7.2 0 0 1-1.3-1.7c-.1-.2 0-.4.1-.5l.4-.5.3-.5v-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.4Z"/>
+  </g>
+  <g id="i-mail" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5.5" width="18" height="13" rx="2.2"/><path d="m3.6 7 7.3 5.2a2 2 0 0 0 2.2 0L20.4 7"/>
+  </g>
+  <g id="i-pin" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 21s7-5.8 7-11a7 7 0 1 0-14 0c0 5.2 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>
+  </g>
+  <g id="i-clock" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="8.6"/><path d="M12 7.2V12l3.2 2"/>
+  </g>
+  <g id="i-drop" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3.2s5.6 6 5.6 9.6a5.6 5.6 0 1 1-11.2 0C6.4 9.2 12 3.2 12 3.2Z"/><path d="M9.6 13.4a2.6 2.6 0 0 0 2.5 2.8"/>
+  </g>
+  <g id="i-flask" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9.5 3.2v5.4L4.9 17a2.2 2.2 0 0 0 1.9 3.3h10.4A2.2 2.2 0 0 0 19.1 17l-4.6-8.4V3.2"/><path d="M8.4 3.2h7.2M6.9 14.4h10.2"/>
+  </g>
+  <g id="i-thyroid" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 4.4v4"/><path d="M7.6 8.4c-1.4 2.6-1 6.3 1 8.2 1.6 1.5 3.4.8 3.4-1.4 0-2.2 1.8-2.9 3.4-1.4 2 1.9 2.4-3.8 1-6.4"/><circle cx="12" cy="3.4" r="1.4"/>
+  </g>
+  <g id="i-sugar" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 15.5c2.7 0 2.7-3.4 5.3-3.4S12 15.5 14.7 15.5 17.3 12.1 20 12.1"/><path d="M4 19.4c2.7 0 2.7-3.4 5.3-3.4s2.7 3.4 5.4 3.4 2.6-3.4 5.3-3.4"/><circle cx="16.6" cy="6.2" r="2.8"/>
+  </g>
+  <g id="i-shield" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3.2 5 6v5.6c0 4.3 2.9 7.6 7 9.2 4.1-1.6 7-4.9 7-9.2V6Z"/><path d="m9.2 12 2 2 3.6-3.8"/>
+  </g>
+  <g id="i-beaker" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 3.4h8M9.6 3.4v6.2L6.4 19a1.9 1.9 0 0 0 1.7 2.3h7.8A1.9 1.9 0 0 0 17.6 19l-3.2-9.4V3.4"/><circle cx="11" cy="16.4" r=".9"/><circle cx="13.6" cy="18.6" r=".7"/>
+  </g>
+  <g id="i-heart" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.3 8.6a4.6 4.6 0 0 0-8.3-2.7 4.6 4.6 0 0 0-8.3 2.7c0 1.3.5 2.4 1.2 3.3h3.4l1.2-2.4 2 5 1.5-2.6h4.1c.7-.9 1.2-2 1.2-3.3Z"/><path d="M5.6 13.4c1.9 2.6 6.4 6 6.4 6s4.5-3.4 6.4-6"/>
+  </g>
+  <g id="i-clipboard" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="4.6" width="14" height="16" rx="2.2"/><path d="M9.2 4.6a1.4 1.4 0 0 1 1.4-1.4h2.8a1.4 1.4 0 0 1 1.4 1.4v1.2H9.2Z"/><path d="M9 11.6h6M9 15.4h4"/>
+  </g>
+</defs></svg>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalClinic",
+  "additionalType": "https://schema.org/DiagnosticLab",
+  "name": "Swayamsiddha Diagnostics",
+  "alternateName": "Swayamsiddha Diagnostics — Lab & X-Ray",
+  "description": "Fully automated pathology laboratory and DR digital X-ray centre offering blood, urine, stool, thyroid and diabetes testing, digital ECG and same-day reports.",
+  "url": "https://bhavuk461.github.io/swayamsiddha-diagnostics/",
+  "telephone": "+917847889009",
+  "email": "swayamsiddha999@yahoo.com",
+  "image": "https://bhavuk461.github.io/swayamsiddha-diagnostics/assets/img/exterior-2.jpeg",
+  "logo": "https://bhavuk461.github.io/swayamsiddha-diagnostics/assets/img/logo.jpeg",
+  "address": { "@type": "PostalAddress", "addressRegion": "Odisha", "addressCountry": "IN" },
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], "opens": "07:00", "closes": "20:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "07:00", "closes": "13:00" }
+  ],
+  "availableService": [
+    { "@type": "MedicalTest", "name": "Complete Blood Count (CBC)" },
+    { "@type": "MedicalTest", "name": "Thyroid profile (T3, T4, TSH)" },
+    { "@type": "MedicalTest", "name": "Blood sugar and HbA1c" },
+    { "@type": "MedicalTest", "name": "Liver and kidney function tests" },
+    { "@type": "MedicalTest", "name": "Lipid profile" },
+    { "@type": "MedicalTest", "name": "Urine and stool examination" },
+    { "@type": "MedicalTest", "name": "Digital 12-lead ECG" },
+    { "@type": "MedicalTest", "name": "DR digital X-ray" }
+  ]
+}
+</script>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
