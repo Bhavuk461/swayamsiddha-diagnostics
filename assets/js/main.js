@@ -193,12 +193,12 @@ const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 /* ------------------------------------------------------------------
    Gallery lightbox
    ------------------------------------------------------------------ */
-(function lightbox() {
+const Lightbox = (function lightbox() {
   const dlg = $('#lightbox');
   const img = $('#lb-img');
   const cap = $('#lb-cap');
   const items = $$('.gal__item');
-  if (!dlg || !items.length || typeof dlg.showModal !== 'function') return;
+  if (!dlg || !items.length || typeof dlg.showModal !== 'function') return null;
 
   let index = 0;
 
@@ -217,6 +217,12 @@ const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
       document.body.classList.add('is-locked');
     })
   );
+
+  const open = (i) => {
+    show(i);
+    dlg.showModal();
+    document.body.classList.add('is-locked');
+  };
 
   const close = () => dlg.close();
   $('#lb-close')?.addEventListener('click', close);
@@ -244,6 +250,180 @@ const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
     if (Math.abs(dx) > 48) show(index + (dx < 0 ? 1 : -1));
     x0 = null;
   }, { passive: true });
+
+  return { open };
+})();
+
+/* ------------------------------------------------------------------
+   Photo reel — the gallery photos ride a curved offset-path under the
+   hero. Items are laid out at even offsets along the path and a single
+   shared position is advanced each frame, so the reel loops seamlessly.
+   Hover eases it down, dragging scrubs it with momentum, and z-index
+   rolls with position so overlaps stay consistent.
+   ------------------------------------------------------------------ */
+(function reel() {
+  const wrap = $('#reel');
+  const stage = $('#reel-stage');
+  const hint = $('#reel-hint');
+  const sources = $$('.gal__item');
+  if (!wrap || !stage || !sources.length) return;
+
+  const SPEED = 2.4;        // % of the path per second
+  const HOVER_SLOW = 0.25;  // multiplier while pointing at the reel
+  const DRAG = 0.085;       // % of the path per pixel dragged
+  const clamp = (lo, v, hi) => Math.max(lo, Math.min(v, hi));
+
+  let items = [], base = 0, raf = 0;
+  let hovering = false, dragging = false, dragVel = 0, hoverF = 1;
+  let lastT = 0, lastX = 0, travelled = 0, lastW = 0;
+
+  /* Geometry derived from the live width: a shallow wave running off both
+     edges, tiles sized to stay legible, and just enough tiles to fill it. */
+  function geometry(w) {
+    const h = Math.round(clamp(200, w * 0.22, 300));
+    const tw = Math.round(clamp(96, w * 0.105, 150));
+    const th = Math.round(tw * 0.7);
+    const y0 = h * 0.70, yT = h * 0.26, yB = h * 0.80, yE = h * 0.45;
+    const x = (f) => Math.round(w * f);
+    const path = `M${x(-0.12)} ${y0.toFixed(1)}`
+      + `C${x(0.05)} ${y0.toFixed(1)} ${x(0.10)} ${yT.toFixed(1)} ${x(0.30)} ${yT.toFixed(1)}`
+      + `C${x(0.50)} ${yT.toFixed(1)} ${x(0.55)} ${yB.toFixed(1)} ${x(0.76)} ${yB.toFixed(1)}`
+      + `C${x(0.92)} ${yB.toFixed(1)} ${x(1.02)} ${yE.toFixed(1)} ${x(1.14)} ${yE.toFixed(1)}`;
+    const count = Math.max(4, Math.round((w * 1.36) / (tw * 1.06)));
+    return { h, tw, th, path, count };
+  }
+
+  function build(g) {
+    stage.replaceChildren();
+    items = [];
+    for (let i = 0; i < g.count; i++) {
+      const src = sources[i % sources.length];
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'reel__item';
+      btn.dataset.idx = String(i % sources.length);
+      if (i >= sources.length) { btn.setAttribute('aria-hidden', 'true'); btn.tabIndex = -1; }
+      else btn.setAttribute('aria-label', `Enlarge photo: ${src.dataset.cap || ''}`);
+
+      const img = document.createElement('img');
+      img.src = src.dataset.full;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.draggable = false;
+      btn.appendChild(img);
+      stage.appendChild(btn);
+      items.push(btn);
+    }
+  }
+
+  function fit() {
+    const w = wrap.clientWidth;
+    if (!w) return;
+    const g = geometry(w);
+    if (!items.length || items.length !== g.count) build(g);
+    wrap.style.height = `${g.h}px`;
+    for (const el of items) {
+      el.style.width = `${g.tw}px`;
+      el.style.height = `${g.th}px`;
+      el.style.offsetPath = `path("${g.path}")`;
+    }
+    lastW = w;
+  }
+
+  function place() {
+    const n = items.length;
+    for (let i = 0; i < n; i++) {
+      let v = (base + (i * 100) / n) % 100;
+      if (v < 0) v += 100;
+      const el = items[i];
+      el.style.offsetDistance = `${v.toFixed(3)}%`;
+      el.style.zIndex = String(1 + Math.round((v / 100) * 12));
+      // fade through the masked ends so the loop point never shows
+      el.style.opacity = v < 7 ? (v / 7).toFixed(3)
+        : v > 93 ? ((100 - v) / 7).toFixed(3)
+        : '1';
+    }
+  }
+
+  function frame(now) {
+    const dt = Math.min(0.05, (now - lastT) / 1000);
+    lastT = now;
+
+    const target = hovering && !dragging ? HOVER_SLOW : 1;
+    hoverF += (target - hoverF) * Math.min(1, dt * 7);
+
+    if (!dragging) {
+      if (Math.abs(dragVel) > 0.015) { base += dragVel; dragVel *= 0.94; }
+      else dragVel = 0;
+      base += SPEED * dt * hoverF;
+    }
+
+    place();
+    raf = requestAnimationFrame(frame);
+  }
+
+  const start = () => { if (!raf && !reduceMotion) { lastT = performance.now(); raf = requestAnimationFrame(frame); } };
+  const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } };
+
+  function rebuildIfNeeded() {
+    fit();
+    place();
+  }
+
+  // pointer: drag to scrub, tap to open
+  wrap.addEventListener('pointerdown', (e) => {
+    dragging = true; travelled = 0; lastX = e.clientX; dragVel = 0;
+    wrap.classList.add('is-dragging');
+    wrap.setPointerCapture(e.pointerId);
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX;
+    lastX = e.clientX;
+    travelled += Math.abs(dx);
+    const step = -dx * DRAG;
+    base += step;
+    dragVel = step;
+    place();
+  });
+  const endDrag = (e) => {
+    if (!dragging) return;
+    dragging = false;
+    wrap.classList.remove('is-dragging');
+    try { wrap.releasePointerCapture(e.pointerId); } catch { /* already released */ }
+  };
+  wrap.addEventListener('pointerup', endDrag);
+  wrap.addEventListener('pointercancel', endDrag);
+
+  wrap.addEventListener('mouseenter', () => (hovering = true));
+  wrap.addEventListener('mouseleave', () => (hovering = false));
+
+  stage.addEventListener('click', (e) => {
+    const btn = e.target.closest('.reel__item');
+    if (!btn || travelled > 6) return;
+    Lightbox?.open(Number(btn.dataset.idx) || 0);
+  });
+
+  rebuildIfNeeded();
+  if (hint) hint.hidden = false;
+
+  // Run straight away; the observer below only pauses it when it scrolls out
+  // of view. Never gate starting on the observer firing.
+  start();
+
+  window.addEventListener('resize', () => { if (wrap.clientWidth !== lastW) rebuildIfNeeded(); });
+  window.addEventListener('load', rebuildIfNeeded, { once: true });
+
+  // keep the observers referenced so they are not collected while observing
+  const ro = new ResizeObserver(() => { if (wrap.clientWidth !== lastW) rebuildIfNeeded(); });
+  ro.observe(wrap);
+
+  const io = 'IntersectionObserver' in window
+    ? new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop()), { rootMargin: '160px' })
+    : null;
+  io?.observe(wrap);
+  wrap.__keep = { ro, io };
 })();
 
 /* ------------------------------------------------------------------

@@ -386,11 +386,63 @@ body::after{
 .hero__badge-v{ font-family:var(--f-display); font-size:15px; font-weight:600; color:var(--forest) }
 
 /* ============================================================
+   BAND — curved photo reel sitting above the fact ticker.
+   The two share one surface so they read as a single transition
+   out of the hero rather than two stacked marquees.
+   ============================================================ */
+.band{
+  background:var(--paper-2);
+  border-block:1px solid var(--line-2);
+  overflow:hidden;
+}
+
+/* offset-path only accepts px, so the curve, the tile size and the number of
+   tiles are all generated from the live width in JS — no fixed stage to scale,
+   which keeps the tiles the same physical size at every viewport. */
+.reel{
+  position:relative; width:100%;
+  touch-action:pan-y;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+}
+.reel__stage{ position:absolute; inset:0 }
+.reel__item{
+  position:absolute; top:0; left:0; padding:0;
+  border:1px solid rgba(8,22,14,.14); border-radius:9px;
+  background:var(--card); overflow:hidden; cursor:grab;
+  offset-rotate:0deg;
+  will-change:offset-distance; backface-visibility:hidden;
+  box-shadow:0 16px 28px -20px rgba(4,51,26,.75);
+  transition:scale .4s var(--spring), box-shadow .4s var(--ease), border-color .3s var(--ease);
+}
+.reel__item img{ width:100%; height:100%; object-fit:cover; pointer-events:none; user-select:none }
+.reel__item:hover,.reel__item:focus-visible{
+  scale:1.42; border-color:rgba(10,107,44,.4);
+  box-shadow:0 26px 44px -22px rgba(4,51,26,.8);
+}
+.reel.is-dragging .reel__item{ cursor:grabbing; transition:none }
+.reel.is-dragging .reel__item:hover{ scale:1 }
+
+.reel__hint{
+  text-align:center; font-size:12.5px; letter-spacing:.01em;
+  color:var(--ink-3); font-weight:500; padding:2px 20px 16px;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .reel__item{ transition:none }
+}
+
+@media (max-width:700px){
+  .reel__hint{ font-size:12px }
+  .reel__item:hover{ scale:1 }   /* no hover state on touch */
+}
+
+/* ============================================================
    TICKER
    ============================================================ */
 .ticker{
-  border-block:1px solid var(--line-2);
-  background:var(--paper-2);
+  border-top:1px solid var(--line-2);
+  background:transparent;
   overflow:hidden; padding:14px 0;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
