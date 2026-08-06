@@ -275,7 +275,7 @@ const Lightbox = (function lightbox() {
 
   let items = [], base = 0, raf = 0;
   let hovering = false, dragging = false, dragVel = 0, hoverF = 1;
-  let lastT = 0, lastX = 0, travelled = 0, lastW = 0;
+  let lastT = 0, lastX = 0, travelled = 0, lastW = -1, tries = 0;
 
   /* Geometry derived from the live width: a shallow wave running off both
      edges, tiles sized to stay legible, and just enough tiles to fill it. */
@@ -317,9 +317,7 @@ const Lightbox = (function lightbox() {
     }
   }
 
-  function fit() {
-    const w = wrap.clientWidth;
-    if (!w) return;
+  function fit(w) {
     const g = geometry(w);
     if (!items.length || items.length !== g.count) build(g);
     wrap.style.height = `${g.h}px`;
@@ -366,8 +364,17 @@ const Lightbox = (function lightbox() {
   const start = () => { if (!raf && !reduceMotion) { lastT = performance.now(); raf = requestAnimationFrame(frame); } };
   const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } };
 
+  /* The wrapper can still measure 0 on the first pass, before the band has
+     been laid out. Keep asking until it has a width rather than giving up —
+     otherwise the reel silently never builds. */
   function rebuildIfNeeded() {
-    fit();
+    const w = wrap.clientWidth;
+    if (!w) {
+      if (tries++ < 180) requestAnimationFrame(rebuildIfNeeded);
+      return;
+    }
+    tries = 0;
+    fit(w);
     place();
   }
 
