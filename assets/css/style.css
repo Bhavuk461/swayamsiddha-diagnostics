@@ -417,7 +417,7 @@ body::after{
 }
 .reel__item img{ width:100%; height:100%; object-fit:cover; pointer-events:none; user-select:none }
 .reel__item:hover,.reel__item:focus-visible{
-  scale:1.42; border-color:rgba(10,107,44,.4);
+  scale:1.32; border-color:rgba(10,107,44,.4);
   box-shadow:0 26px 44px -22px rgba(4,51,26,.8);
 }
 .reel.is-dragging .reel__item{ cursor:grabbing; transition:none }

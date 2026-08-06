@@ -273,7 +273,7 @@ const Lightbox = (function lightbox() {
   const DRAG = 0.085;       // % of the path per pixel dragged
   const clamp = (lo, v, hi) => Math.max(lo, Math.min(v, hi));
 
-  let items = [], base = 0, raf = 0;
+  let items = [], base = 0, raf = 0, hoverEl = null;
   let hovering = false, dragging = false, dragVel = 0, hoverF = 1;
   let lastT = 0, lastX = 0, travelled = 0, lastW = -1, tries = 0;
 
@@ -283,7 +283,8 @@ const Lightbox = (function lightbox() {
     const h = Math.round(clamp(200, w * 0.22, 300));
     const tw = Math.round(clamp(96, w * 0.105, 150));
     const th = Math.round(tw * 0.7);
-    const y0 = h * 0.70, yT = h * 0.26, yB = h * 0.80, yE = h * 0.45;
+    // trough kept off the floor so an enlarged tile is not clipped by the band
+    const y0 = h * 0.68, yT = h * 0.26, yB = h * 0.76, yE = h * 0.45;
     const x = (f) => Math.round(w * f);
     const path = `M${x(-0.12)} ${y0.toFixed(1)}`
       + `C${x(0.05)} ${y0.toFixed(1)} ${x(0.10)} ${yT.toFixed(1)} ${x(0.30)} ${yT.toFixed(1)}`
@@ -336,7 +337,11 @@ const Lightbox = (function lightbox() {
       if (v < 0) v += 100;
       const el = items[i];
       el.style.offsetDistance = `${v.toFixed(3)}%`;
-      el.style.zIndex = String(1 + Math.round((v / 100) * 12));
+      // Fine-grained so neighbours never share a value — a coarse scale makes
+      // adjacent tiles swap stacking order every frame, which reads as flicker.
+      // A hovered tile is lifted clear of the pack so it can never enlarge
+      // behind its neighbours (which would let them steal the hover).
+      el.style.zIndex = el === hoverEl ? '2000' : String(1 + Math.round(v * 10));
       // fade through the masked ends so the loop point never shows
       el.style.opacity = v < 7 ? (v / 7).toFixed(3)
         : v > 93 ? ((100 - v) / 7).toFixed(3)
@@ -348,8 +353,12 @@ const Lightbox = (function lightbox() {
     const dt = Math.min(0.05, (now - lastT) / 1000);
     lastT = now;
 
-    const target = hovering && !dragging ? HOVER_SLOW : 1;
+    // Over a tile the belt halts outright, otherwise the tile slides out from
+    // under the cursor, drops the hover, shrinks, catches it again — flicker.
+    let target = 1;
+    if (!dragging) target = hoverEl ? 0 : hovering ? HOVER_SLOW : 1;
     hoverF += (target - hoverF) * Math.min(1, dt * 7);
+    if (target === 0 && hoverF < 0.02) hoverF = 0;
 
     if (!dragging) {
       if (Math.abs(dragVel) > 0.015) { base += dragVel; dragVel *= 0.94; }
@@ -381,6 +390,7 @@ const Lightbox = (function lightbox() {
   // pointer: drag to scrub, tap to open
   wrap.addEventListener('pointerdown', (e) => {
     dragging = true; travelled = 0; lastX = e.clientX; dragVel = 0;
+    hoverEl = null;
     wrap.classList.add('is-dragging');
     wrap.setPointerCapture(e.pointerId);
   });
@@ -404,7 +414,18 @@ const Lightbox = (function lightbox() {
   wrap.addEventListener('pointercancel', endDrag);
 
   wrap.addEventListener('mouseenter', () => (hovering = true));
-  wrap.addEventListener('mouseleave', () => (hovering = false));
+  wrap.addEventListener('mouseleave', () => { hovering = false; hoverEl = null; });
+
+  // delegated, so a tile moving under a stationary cursor is still tracked
+  wrap.addEventListener('pointerover', (e) => {
+    if (e.pointerType === 'touch' || dragging) return;
+    hoverEl = e.target.closest('.reel__item');
+  });
+  wrap.addEventListener('pointerout', (e) => {
+    if (e.pointerType === 'touch') return;
+    const to = e.relatedTarget;
+    if (!to || !to.closest || !to.closest('.reel__item')) hoverEl = null;
+  });
 
   stage.addEventListener('click', (e) => {
     const btn = e.target.closest('.reel__item');
