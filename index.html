@@ -103,6 +103,7 @@
 
     <nav class="nav__links" aria-label="Primary">
       <a href="#tests">Tests</a>
+      <a href="#how-it-works">How It Works</a>
       <a href="#technology">Technology</a>
       <a href="#home-collection">Home Collection</a>
       <a href="#gallery">Gallery</a>
@@ -123,10 +124,11 @@
 <div class="mobile" id="mobile-menu" hidden>
   <nav class="mobile__links" aria-label="Mobile">
     <a href="#tests"><em>01</em> Tests</a>
-    <a href="#technology"><em>02</em> Technology</a>
-    <a href="#home-collection"><em>03</em> Home Collection</a>
-    <a href="#gallery"><em>04</em> Gallery</a>
-    <a href="#visit"><em>05</em> Visit Us</a>
+    <a href="#how-it-works"><em>02</em> How It Works</a>
+    <a href="#technology"><em>03</em> Technology</a>
+    <a href="#home-collection"><em>04</em> Home Collection</a>
+    <a href="#gallery"><em>05</em> Gallery</a>
+    <a href="#visit"><em>06</em> Visit Us</a>
   </nav>
   <div class="mobile__foot">
     <a class="btn btn--solid btn--block" href="tel:+917847889009">Call +91 78478 89009</a>
@@ -139,7 +141,6 @@
 
 <!-- ─────────────────────────── hero ─────────────────────────── -->
 <section class="hero">
-  <div class="hero__glow" aria-hidden="true"></div>
   <div class="shell hero__grid">
 
     <div class="hero__copy">
@@ -235,10 +236,38 @@
 <!-- ─────────────────────────── tests ─────────────────────────── -->
 <section class="tests" id="tests">
   <div class="shell">
-    <div class="sec-head">
-      <p class="eyebrow reveal"><em>02</em> What we test</p>
-      <h2 class="h2 reveal" style="--d:1">A full pathology menu,<br>plus X-ray and ECG.</h2>
-      <p class="sec-head__note reveal" style="--d:2" lang="or">ଏଠାରେ ରକ୍ତ, ମଳ, ମୂତ୍ର, ଧାତୁ, କଫ, ଗର୍ଭ ଇତ୍ୟାଦି ପରୀକ୍ଷା କରାଯାଏ।</p>
+    <div class="tests__intro">
+      <div class="sec-head">
+        <p class="eyebrow reveal"><em>02</em> What we test</p>
+        <h2 class="h2 reveal" style="--d:1">A full pathology menu,<br>plus X-ray and ECG.</h2>
+        <p class="sec-head__note reveal" style="--d:2" lang="or">ଏଠାରେ ରକ୍ତ, ମଳ, ମୂତ୍ର, ଧାତୁ, କଫ, ଗର୍ଭ ଇତ୍ୟାଦି ପରୀକ୍ଷା କରାଯାଏ।</p>
+      </div>
+
+      <!-- every category orbits the one lab -->
+      <div class="orbit reveal" style="--d:2" aria-hidden="true">
+        <span class="orbit__ring" style="--d:168px"></span>
+        <span class="orbit__ring" style="--d:262px"></span>
+        <span class="orbit__ring" style="--d:356px"></span>
+
+        <span class="orbit__core"><svg viewBox="0 0 200 200"><use href="#ssd-mark"/></svg></span>
+
+        <span class="orbit__track" style="--dur:34s;--dir:normal">
+          <span class="orbit__chip" style="--a:20deg;--r:84px;--dur:34s;--dir:normal"><svg viewBox="0 0 24 24"><use href="#i-drop"/></svg></span>
+          <span class="orbit__chip" style="--a:200deg;--r:84px;--dur:34s;--dir:normal"><svg viewBox="0 0 24 24"><use href="#i-flask"/></svg></span>
+        </span>
+
+        <span class="orbit__track" style="--dur:48s;--dir:reverse">
+          <span class="orbit__chip" style="--a:0deg;--r:131px;--dur:48s;--dir:reverse"><svg viewBox="0 0 24 24"><use href="#i-thyroid"/></svg></span>
+          <span class="orbit__chip" style="--a:120deg;--r:131px;--dur:48s;--dir:reverse"><svg viewBox="0 0 24 24"><use href="#i-sugar"/></svg></span>
+          <span class="orbit__chip" style="--a:240deg;--r:131px;--dur:48s;--dir:reverse"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg></span>
+        </span>
+
+        <span class="orbit__track" style="--dur:64s;--dir:normal">
+          <span class="orbit__chip" style="--a:52deg;--r:178px;--dur:64s;--dir:normal"><svg viewBox="0 0 24 24"><use href="#i-beaker"/></svg></span>
+          <span class="orbit__chip" style="--a:168deg;--r:178px;--dur:64s;--dir:normal"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg></span>
+          <span class="orbit__chip" style="--a:290deg;--r:178px;--dur:64s;--dir:normal"><svg viewBox="0 0 24 24"><use href="#i-xray"/></svg></span>
+        </span>
+      </div>
     </div>
 
     <div class="tests__grid">
@@ -347,11 +376,66 @@
   </div>
 </section>
 
+<!-- ─────────────────────────── how it works ─────────────────────────── -->
+<section class="flow" id="how-it-works">
+  <div class="shell">
+    <div class="sec-head">
+      <p class="eyebrow reveal"><em>03</em> How it works</p>
+      <h2 class="h2 reveal" style="--d:1">From the front door<br>to your report.</h2>
+      <p class="sec-head__note reveal" style="--d:2">
+        Four steps, no surprises. This is exactly what happens to your sample between
+        walking in and reading the result.
+      </p>
+    </div>
+
+    <div class="flow__stage">
+      <!-- the sample's route through the lab; tokens ride this path -->
+      <svg class="flow__line reveal" viewBox="0 0 1200 130" aria-hidden="true">
+        <path class="flow__rail" d="M20 65 L143 65 C219 65 219 22 295 22 C372 22 372 65 448 65 C524 65 524 108 600 108 C676 108 676 65 752 65 C828 65 828 22 904 22 C981 22 981 65 1057 65 L1180 65"/>
+        <circle class="flow__node" cx="143" cy="65" r="7"/>
+        <circle class="flow__node" cx="448" cy="65" r="7"/>
+        <circle class="flow__node" cx="752" cy="65" r="7"/>
+        <circle class="flow__node" cx="1057" cy="65" r="7"/>
+        <circle class="flow__token" style="--t:0s" r="5.5"/>
+        <circle class="flow__token" style="--t:-4s" r="5.5"/>
+        <circle class="flow__token" style="--t:-8s" r="5.5"/>
+      </svg>
+
+      <ol class="flow__steps">
+        <li class="flow__step reveal">
+          <span class="flow__num">01</span>
+          <span class="flow__ico"><svg viewBox="0 0 24 24"><use href="#i-walkin"/></svg></span>
+          <h3>Walk in or call ahead</h3>
+          <p>No appointment needed for routine tests. Bring your prescription if you have one, and ask the rate at the counter before anything is drawn.</p>
+        </li>
+        <li class="flow__step reveal" style="--d:1">
+          <span class="flow__num">02</span>
+          <span class="flow__ico"><svg viewBox="0 0 24 24"><use href="#i-vial"/></svg></span>
+          <h3>Sample taken</h3>
+          <p>A fresh needle and a sealed vacutainer, opened in front of you. X-ray and ECG are done in the same visit — no second trip.</p>
+        </li>
+        <li class="flow__step reveal" style="--d:2">
+          <span class="flow__num">03</span>
+          <span class="flow__ico"><svg viewBox="0 0 24 24"><use href="#i-analyzer"/></svg></span>
+          <h3>Run on the analyzer</h3>
+          <p>Your sample goes straight onto a closed automated system. Daily controls run alongside it, so the numbers are checked before they reach you.</p>
+        </li>
+        <li class="flow__step reveal" style="--d:3">
+          <span class="flow__num">04</span>
+          <span class="flow__ico"><svg viewBox="0 0 24 24"><use href="#i-report"/></svg></span>
+          <h3>Report the same day</h3>
+          <p>Most routine reports are ready the same day. Collect at the counter, or ask us to send it to you on WhatsApp.</p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
 <!-- ─────────────────────────── technology ─────────────────────────── -->
 <section class="tech" id="technology">
   <div class="shell">
     <div class="sec-head sec-head--light">
-      <p class="eyebrow reveal"><em>03</em> The equipment</p>
+      <p class="eyebrow reveal"><em>04</em> The equipment</p>
       <h2 class="h2 reveal" style="--d:1">Every routine test here runs<br>on an automated analyzer.</h2>
       <p class="sec-head__note reveal" style="--d:2">
         Automation is not a slogan for us — it is why two samples from the same patient give the
@@ -459,7 +543,7 @@
 <section class="home" id="home-collection">
   <div class="shell home__grid">
     <div class="home__copy">
-      <p class="eyebrow reveal"><em>04</em> Home sample collection</p>
+      <p class="eyebrow reveal"><em>05</em> Home sample collection</p>
       <h2 class="h2 reveal" style="--d:1">If getting here is the hard part,<br>we will come to you.</h2>
       <p class="lede reveal" style="--d:2">
         We collect samples at home for people who genuinely cannot travel — elderly patients,
@@ -493,7 +577,7 @@
 <section class="gal" id="gallery">
   <div class="shell">
     <div class="sec-head">
-      <p class="eyebrow reveal"><em>05</em> Inside the centre</p>
+      <p class="eyebrow reveal"><em>06</em> Inside the centre</p>
       <h2 class="h2 reveal" style="--d:1">Have a look before you come.</h2>
     </div>
   </div>
@@ -529,7 +613,7 @@
 <section class="visit" id="visit">
   <div class="shell">
     <div class="sec-head sec-head--light">
-      <p class="eyebrow reveal"><em>06</em> Visit us</p>
+      <p class="eyebrow reveal"><em>07</em> Visit us</p>
       <h2 class="h2 reveal" style="--d:1">Walk in, or call ahead.<br>Either works.</h2>
     </div>
 
@@ -694,6 +778,25 @@
   </g>
   <g id="i-clipboard" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
     <rect x="5" y="4.6" width="14" height="16" rx="2.2"/><path d="M9.2 4.6a1.4 1.4 0 0 1 1.4-1.4h2.8a1.4 1.4 0 0 1 1.4 1.4v1.2H9.2Z"/><path d="M9 11.6h6M9 15.4h4"/>
+  </g>
+  <g id="i-xray" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="3.4" width="16" height="17.2" rx="2.2"/><path d="M12 7v10"/>
+    <path d="M9 9.6c1.7 1.1 4.3 1.1 6 0M8.6 13.2c2.1 1.3 4.7 1.3 6.8 0"/>
+  </g>
+  <g id="i-walkin" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13.6 3.4H6.8a1.6 1.6 0 0 0-1.6 1.6v14a1.6 1.6 0 0 0 1.6 1.6h6.8"/>
+    <path d="M10.6 12h8.2m-3.2-3.5L19 12l-3.4 3.5"/>
+  </g>
+  <g id="i-vial" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8.6 3.2h6.8"/><path d="M9.9 3.2v13.4a2.1 2.1 0 0 0 4.2 0V3.2"/><path d="M9.9 11.4h4.2"/>
+  </g>
+  <g id="i-analyzer" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3.2" y="5" width="17.6" height="14" rx="2.2"/><rect x="6.2" y="8.6" width="5.6" height="4.6" rx="1"/>
+    <path d="M14.6 9.2h4M14.6 12h4M14.6 14.8h2.6M6.4 15.6h4.4"/>
+  </g>
+  <g id="i-report" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13.4 3.2H7a1.8 1.8 0 0 0-1.8 1.8v14a1.8 1.8 0 0 0 1.8 1.8h10a1.8 1.8 0 0 0 1.8-1.8V8.6Z"/>
+    <path d="M13.4 3.2v4a1.4 1.4 0 0 0 1.4 1.4h4"/><path d="m8.8 15 2 2 4-4.4"/>
   </g>
 </defs></svg>
 
