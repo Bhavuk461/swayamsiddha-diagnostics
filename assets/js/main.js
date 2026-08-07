@@ -197,32 +197,39 @@ const Lightbox = (function lightbox() {
   const dlg = $('#lightbox');
   const img = $('#lb-img');
   const cap = $('#lb-cap');
-  const items = $$('.gal__item');
-  if (!dlg || !items.length || typeof dlg.showModal !== 'function') return null;
+  const tiles = $$('.gal__item');
+  if (!dlg || typeof dlg.showModal !== 'function') return null;
 
+  // The gallery and the reel hold different pictures, so the viewer is handed
+  // whichever set was clicked rather than owning one of them.
+  const gallery = tiles.map((btn) => ({
+    full: btn.dataset.full,
+    cap: btn.dataset.cap || '',
+    alt: $('img', btn)?.alt || '',
+  }));
+
+  let list = gallery;
   let index = 0;
+  let opener = null;
 
   const show = (i) => {
-    index = (i + items.length) % items.length;
-    const btn = items[index];
-    img.src = btn.dataset.full;
-    img.alt = $('img', btn)?.alt || '';
-    cap.textContent = btn.dataset.cap || '';
+    if (!list.length) return;
+    index = (i + list.length) % list.length;
+    const it = list[index];
+    img.src = it.full;
+    img.alt = it.alt || '';
+    cap.textContent = it.cap || '';
   };
 
-  items.forEach((btn, i) =>
-    btn.addEventListener('click', () => {
-      show(i);
-      dlg.showModal();
-      document.body.classList.add('is-locked');
-    })
-  );
-
-  const open = (i) => {
+  const open = (set, i, from) => {
+    list = Array.isArray(set) && set.length ? set : gallery;
+    opener = from || null;
     show(i);
     dlg.showModal();
     document.body.classList.add('is-locked');
   };
+
+  tiles.forEach((btn, i) => btn.addEventListener('click', () => open(gallery, i, btn)));
 
   const close = () => dlg.close();
   $('#lb-close')?.addEventListener('click', close);
@@ -234,7 +241,7 @@ const Lightbox = (function lightbox() {
   });
   dlg.addEventListener('close', () => {
     document.body.classList.remove('is-locked');
-    items[index]?.focus();
+    opener?.focus?.();
   });
   dlg.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1); }
@@ -265,49 +272,96 @@ const Lightbox = (function lightbox() {
   const wrap = $('#reel');
   const stage = $('#reel-stage');
   const hint = $('#reel-hint');
-  const sources = $$('.gal__item');
-  if (!wrap || !stage || !sources.length) return;
+  if (!wrap || !stage) return;
 
-  const SPEED = 2.4;        // % of the path per second
-  const HOVER_SLOW = 0.25;  // multiplier while pointing at the reel
-  const DRAG = 0.085;       // % of the path per pixel dragged
+  const REEL = [
+    { full: 'assets/img/reel-vials.jpg', cap: 'Blood samples ready for the analyzer' },
+    { full: 'assets/img/reel-microscope.jpg', cap: 'Microscopy bench' },
+    { full: 'assets/img/reel-heart.jpg', cap: 'Cardiac testing — digital 12-lead ECG' },
+    { full: 'assets/img/reel-testtube.jpg', cap: 'Haematology — cell counts and morphology' },
+    { full: 'assets/img/reel-kidney.jpg', cap: 'Kidney function testing (KFT / RFT)' },
+  ];
+
+  const SPEED = 2.4;   // % of the path per second
+  const DRAG = 0.085;  // % of the path per pixel dragged
   const clamp = (lo, v, hi) => Math.max(lo, Math.min(v, hi));
 
   let items = [], base = 0, raf = 0, hoverEl = null;
   let hovering = false, dragging = false, dragVel = 0, hoverF = 1;
   let lastT = 0, lastX = 0, travelled = 0, lastW = -1, tries = 0;
+  let lastBase = NaN, lastHover = null;
 
-  /* Geometry derived from the live width: a shallow wave running off both
-     edges, tiles sized to stay legible, and just enough tiles to fill it. */
+  /* Single source of truth for the hover: the class drives the visual lift and
+     the same flag drives the stacking order, so they cannot disagree. */
+  function setHover(el) {
+    if (hoverEl === el) return;
+    if (hoverEl) hoverEl.classList.remove('is-hot');
+    hoverEl = el;
+    if (hoverEl) hoverEl.classList.add('is-hot');
+  }
+
+  /* Two path shapes, both authored as unit coordinates and mapped onto the
+     live box, so the curve always spans the full width and the tiles are
+     sized independently of it.
+       LOOP  — the curl: runs in low, sweeps up, loops back on itself, exits.
+               Needs horizontal room, so it is desktop only.
+       WAVE  — a shallow S for narrow screens, where a loop would be illegible. */
+  const LOOP = [
+    [0, 0.6849],
+    [0.0579, 0.8109, 0.3893, 1, 0.4845, 0.6849],
+    [0.6035, 0.2902, 0.5277, 0, 0.4289, 0.1712],
+    [0.3301, 0.3424, 0.3540, 0.7751, 0.5172, 0.8417],
+    [0.6476, 0.8949, 0.9483, 0.6104, 1, 0.5415],
+  ];
+  const WAVE = [
+    [0, 0.72],
+    [0.17, 0.72, 0.22, 0.16, 0.42, 0.16],
+    [0.62, 0.16, 0.67, 0.9, 0.87, 0.9],
+    [1.0, 0.9, 1.05, 0.62, 1.12, 0.55],
+  ];
+
+  const measure = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
   function geometry(w) {
-    const h = Math.round(clamp(200, w * 0.22, 300));
-    const tw = Math.round(clamp(96, w * 0.105, 150));
-    const th = Math.round(tw * 0.7);
-    // trough kept off the floor so an enlarged tile is not clipped by the band
-    const y0 = h * 0.68, yT = h * 0.26, yB = h * 0.76, yE = h * 0.45;
-    const x = (f) => Math.round(w * f);
-    const path = `M${x(-0.12)} ${y0.toFixed(1)}`
-      + `C${x(0.05)} ${y0.toFixed(1)} ${x(0.10)} ${yT.toFixed(1)} ${x(0.30)} ${yT.toFixed(1)}`
-      + `C${x(0.50)} ${yT.toFixed(1)} ${x(0.55)} ${yB.toFixed(1)} ${x(0.76)} ${yB.toFixed(1)}`
-      + `C${x(0.92)} ${yB.toFixed(1)} ${x(1.02)} ${yE.toFixed(1)} ${x(1.14)} ${yE.toFixed(1)}`;
-    const count = Math.max(4, Math.round((w * 1.36) / (tw * 1.06)));
-    return { h, tw, th, path, count };
+    const loop = w >= 860;
+    const tile = Math.round(loop ? clamp(64, w * 0.062, 104) : clamp(84, w * 0.2, 104));
+    const h = Math.round(loop ? clamp(280, w * 0.30, 420) : clamp(190, w * 0.52, 250));
+    const pts = loop ? LOOP : WAVE;
+
+    // rotated tiles swing a half-diagonal wide, so inset the curve by that much
+    const pad = tile * 0.72;
+    const ox = tile * 0.7;
+    const X = (f) => (-ox + f * (w + 2 * ox)).toFixed(1);
+    const Y = (f) => (pad + f * (h - 2 * pad)).toFixed(1);
+
+    let d = `M${X(pts[0][0])} ${Y(pts[0][1])}`;
+    for (let i = 1; i < pts.length; i++) {
+      const c = pts[i];
+      d += `C${X(c[0])} ${Y(c[1])} ${X(c[2])} ${Y(c[3])} ${X(c[4])} ${Y(c[5])}`;
+    }
+
+    measure.setAttribute('d', d);
+    const len = measure.getTotalLength() || w * 1.4;
+    const count = Math.max(5, Math.round(len / (tile * 0.86)));
+    return { h, tile, path: d, count, loop };
   }
 
   function build(g) {
+    hoverEl = null;            // the node it pointed at is about to be discarded
+    lastHover = null;
     stage.replaceChildren();
     items = [];
     for (let i = 0; i < g.count; i++) {
-      const src = sources[i % sources.length];
+      const k = i % REEL.length;
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'reel__item';
-      btn.dataset.idx = String(i % sources.length);
-      if (i >= sources.length) { btn.setAttribute('aria-hidden', 'true'); btn.tabIndex = -1; }
-      else btn.setAttribute('aria-label', `Enlarge photo: ${src.dataset.cap || ''}`);
+      btn.dataset.idx = String(k);
+      if (i >= REEL.length) { btn.setAttribute('aria-hidden', 'true'); btn.tabIndex = -1; }
+      else btn.setAttribute('aria-label', `Enlarge: ${REEL[k].cap}`);
 
       const img = document.createElement('img');
-      img.src = src.dataset.full;
+      img.src = REEL[k].full;
       img.alt = '';
       img.loading = 'lazy';
       img.decoding = 'async';
@@ -323,8 +377,8 @@ const Lightbox = (function lightbox() {
     if (!items.length || items.length !== g.count) build(g);
     wrap.style.height = `${g.h}px`;
     for (const el of items) {
-      el.style.width = `${g.tw}px`;
-      el.style.height = `${g.th}px`;
+      el.style.width = `${g.tile}px`;
+      el.style.height = `${g.tile}px`;
       el.style.offsetPath = `path("${g.path}")`;
     }
     lastW = w;
@@ -353,20 +407,24 @@ const Lightbox = (function lightbox() {
     const dt = Math.min(0.05, (now - lastT) / 1000);
     lastT = now;
 
-    // Over a tile the belt halts outright, otherwise the tile slides out from
-    // under the cursor, drops the hover, shrinks, catches it again — flicker.
-    let target = 1;
-    if (!dragging) target = hoverEl ? 0 : hovering ? HOVER_SLOW : 1;
-    hoverF += (target - hoverF) * Math.min(1, dt * 7);
-    if (target === 0 && hoverF < 0.02) hoverF = 0;
-
+    // Halt the instant the pointer is over the reel — easing to a stop keeps
+    // the tile sliding out from under the cursor, which drops the hover and
+    // starts it flickering. Ease back up only on the way out.
     if (!dragging) {
+      if (hovering) hoverF = 0;
+      else hoverF += (1 - hoverF) * Math.min(1, dt * 4);
+
       if (Math.abs(dragVel) > 0.015) { base += dragVel; dragVel *= 0.94; }
       else dragVel = 0;
       base += SPEED * dt * hoverF;
     }
 
-    place();
+    // Only touch the DOM when something actually moved.
+    if (base !== lastBase || hoverEl !== lastHover) {
+      place();
+      lastBase = base;
+      lastHover = hoverEl;
+    }
     raf = requestAnimationFrame(frame);
   }
 
@@ -390,7 +448,7 @@ const Lightbox = (function lightbox() {
   // pointer: drag to scrub, tap to open
   wrap.addEventListener('pointerdown', (e) => {
     dragging = true; travelled = 0; lastX = e.clientX; dragVel = 0;
-    hoverEl = null;
+    setHover(null);
     wrap.classList.add('is-dragging');
     wrap.setPointerCapture(e.pointerId);
   });
@@ -413,24 +471,29 @@ const Lightbox = (function lightbox() {
   wrap.addEventListener('pointerup', endDrag);
   wrap.addEventListener('pointercancel', endDrag);
 
-  wrap.addEventListener('mouseenter', () => (hovering = true));
-  wrap.addEventListener('mouseleave', () => { hovering = false; hoverEl = null; });
+  // Touch taps can emit mouseenter, which would freeze the belt for good on a
+  // phone — so hover pausing is limited to devices with a real pointer.
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  wrap.addEventListener('mouseenter', () => { if (canHover) hovering = true; });
+  wrap.addEventListener('mouseleave', () => { hovering = false; setHover(null); });
 
   // delegated, so a tile moving under a stationary cursor is still tracked
   wrap.addEventListener('pointerover', (e) => {
-    if (e.pointerType === 'touch' || dragging) return;
-    hoverEl = e.target.closest('.reel__item');
+    if (!canHover || e.pointerType === 'touch' || dragging) return;
+    hovering = true;
+    setHover(e.target.closest('.reel__item'));
   });
   wrap.addEventListener('pointerout', (e) => {
     if (e.pointerType === 'touch') return;
     const to = e.relatedTarget;
-    if (!to || !to.closest || !to.closest('.reel__item')) hoverEl = null;
+    if (!to || !to.closest || !to.closest('.reel__item')) setHover(null);
   });
 
   stage.addEventListener('click', (e) => {
     const btn = e.target.closest('.reel__item');
     if (!btn || travelled > 6) return;
-    Lightbox?.open(Number(btn.dataset.idx) || 0);
+    Lightbox?.open(REEL, Number(btn.dataset.idx) || 0, btn);
   });
 
   rebuildIfNeeded();
