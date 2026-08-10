@@ -409,12 +409,14 @@ body.has-booted .foot{ opacity:1; transition:opacity .9s cubic-bezier(.4,0,.2,1)
    section before the dark equipment section. Decorative only:
    no pointer interaction of any kind.
    ============================================================ */
-/* background lives on the wrapper so the mask fades only the tiles */
+/* Background lives on the wrapper so the mask fades only the tiles. It sits
+   between the black equipment section and home collection, so it carries the
+   page tone — crisp edge off the black, seamless into the section below. */
 .belt{
-  background:var(--paper-2);
+  background:var(--paper);
   overflow:hidden;
   pointer-events:none;
-  padding-bottom:clamp(20px,3.5vw,44px);
+  padding-top:clamp(16px,2.5vw,34px);
 }
 .reel{
   position:relative; width:100%;
@@ -864,7 +866,13 @@ body.has-booted .foot{ opacity:1; transition:opacity .9s cubic-bezier(.4,0,.2,1)
   display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,.85fr) minmax(0,1fr);
   gap:clamp(28px,4vw,56px); padding-bottom:38px; border-bottom:1px solid var(--d-line);
 }
-.foot__mark{ width:46px; height:46px; color:var(--leaf); margin-bottom:16px }
+/* The mark is dark green everywhere. Against the near-black footer that needs
+   a light chip behind it — which is how the logo exists anyway. */
+.foot__mark{
+  width:54px; height:54px; padding:6px; box-sizing:border-box;
+  color:var(--logo); background:var(--paper); border-radius:15px;
+  margin-bottom:16px;
+}
 .foot__name{ font-family:var(--f-display); font-size:22px; font-weight:600; color:#fff }
 .foot__odia{ font-family:var(--f-or); font-size:15px; color:var(--d-ink-2); margin-top:4px }
 .foot__tag{ margin-top:12px; font-size:14.5px; color:var(--d-ink-2); font-style:italic }
