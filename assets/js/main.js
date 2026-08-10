@@ -39,12 +39,19 @@ const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
     if (done) return;
     done = true;
     el.classList.add('is-out');
-    document.body.classList.remove('is-locked');
-    el.addEventListener('animationend', () => el.remove(), { once: true });
-    setTimeout(() => el.remove(), 900);
+    // swap the classes together so the page fades up as the sheet dissolves
+    document.body.classList.remove('is-locked', 'is-booting');
+    document.body.classList.add('has-booted');
+    // the stage animates too, so only tear down on the overlay's own animation
+    el.addEventListener('animationend', (e) => { if (e.target === el) el.remove(); });
+    setTimeout(() => el.remove(), 1400);
+    // Once the fade is done, drop the class entirely. Without it there is no
+    // opacity declaration at all, so a stalled or interrupted transition can
+    // never leave the page sitting invisible.
+    setTimeout(() => document.body.classList.remove('has-booted'), 2200);
   };
 
-  document.body.classList.add('is-locked');
+  document.body.classList.add('is-locked', 'is-booting');
 
   const finish = () => {
     const wait = Math.max(0, MIN_SHOW - (performance.now() - started));
@@ -265,40 +272,27 @@ const Lightbox = (function lightbox() {
    Photo reel — the gallery photos ride a curved offset-path under the
    hero. Items are laid out at even offsets along the path and a single
    shared position is advanced each frame, so the reel loops seamlessly.
-   Hover eases it down, dragging scrubs it with momentum, and z-index
+   It is decorative only — no hover, drag or click — and z-index
    rolls with position so overlaps stay consistent.
    ------------------------------------------------------------------ */
 (function reel() {
   const wrap = $('#reel');
   const stage = $('#reel-stage');
-  const hint = $('#reel-hint');
   if (!wrap || !stage) return;
 
   const REEL = [
-    { full: 'assets/img/reel-vials.jpg', cap: 'Blood samples ready for the analyzer' },
-    { full: 'assets/img/reel-microscope.jpg', cap: 'Microscopy bench' },
-    { full: 'assets/img/reel-heart.jpg', cap: 'Cardiac testing — digital 12-lead ECG' },
-    { full: 'assets/img/reel-testtube.jpg', cap: 'Haematology — cell counts and morphology' },
-    { full: 'assets/img/reel-kidney.jpg', cap: 'Kidney function testing (KFT / RFT)' },
+    'assets/img/reel-vials.jpg',
+    'assets/img/reel-microscope.jpg',
+    'assets/img/reel-heart.jpg',
+    'assets/img/reel-testtube.jpg',
+    'assets/img/reel-kidney.jpg',
   ];
 
   const SPEED = 2.4;   // % of the path per second
-  const DRAG = 0.085;  // % of the path per pixel dragged
   const clamp = (lo, v, hi) => Math.max(lo, Math.min(v, hi));
 
-  let items = [], base = 0, raf = 0, hoverEl = null;
-  let hovering = false, dragging = false, dragVel = 0, hoverF = 1;
-  let lastT = 0, lastX = 0, travelled = 0, lastW = -1, tries = 0;
-  let lastBase = NaN, lastHover = null;
-
-  /* Single source of truth for the hover: the class drives the visual lift and
-     the same flag drives the stacking order, so they cannot disagree. */
-  function setHover(el) {
-    if (hoverEl === el) return;
-    if (hoverEl) hoverEl.classList.remove('is-hot');
-    hoverEl = el;
-    if (hoverEl) hoverEl.classList.add('is-hot');
-  }
+  let items = [], base = 0, raf = 0;
+  let lastT = 0, lastW = -1, tries = 0, lastBase = NaN;
 
   /* Two path shapes, both authored as unit coordinates and mapped onto the
      live box, so the curve always spans the full width and the tiles are
@@ -346,29 +340,23 @@ const Lightbox = (function lightbox() {
     return { h, tile, path: d, count, loop };
   }
 
+  // Purely decorative: plain divs, nothing focusable, nothing clickable.
   function build(g) {
-    hoverEl = null;            // the node it pointed at is about to be discarded
-    lastHover = null;
     stage.replaceChildren();
     items = [];
     for (let i = 0; i < g.count; i++) {
-      const k = i % REEL.length;
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'reel__item';
-      btn.dataset.idx = String(k);
-      if (i >= REEL.length) { btn.setAttribute('aria-hidden', 'true'); btn.tabIndex = -1; }
-      else btn.setAttribute('aria-label', `Enlarge: ${REEL[k].cap}`);
+      const cell = document.createElement('div');
+      cell.className = 'reel__item';
 
       const img = document.createElement('img');
-      img.src = REEL[k].full;
+      img.src = REEL[i % REEL.length];
       img.alt = '';
       img.loading = 'lazy';
       img.decoding = 'async';
       img.draggable = false;
-      btn.appendChild(img);
-      stage.appendChild(btn);
-      items.push(btn);
+      cell.appendChild(img);
+      stage.appendChild(cell);
+      items.push(cell);
     }
   }
 
@@ -393,9 +381,7 @@ const Lightbox = (function lightbox() {
       el.style.offsetDistance = `${v.toFixed(3)}%`;
       // Fine-grained so neighbours never share a value — a coarse scale makes
       // adjacent tiles swap stacking order every frame, which reads as flicker.
-      // A hovered tile is lifted clear of the pack so it can never enlarge
-      // behind its neighbours (which would let them steal the hover).
-      el.style.zIndex = el === hoverEl ? '2000' : String(1 + Math.round(v * 10));
+      el.style.zIndex = String(1 + Math.round(v * 10));
       // fade through the masked ends so the loop point never shows
       el.style.opacity = v < 7 ? (v / 7).toFixed(3)
         : v > 93 ? ((100 - v) / 7).toFixed(3)
@@ -406,25 +392,8 @@ const Lightbox = (function lightbox() {
   function frame(now) {
     const dt = Math.min(0.05, (now - lastT) / 1000);
     lastT = now;
-
-    // Halt the instant the pointer is over the reel — easing to a stop keeps
-    // the tile sliding out from under the cursor, which drops the hover and
-    // starts it flickering. Ease back up only on the way out.
-    if (!dragging) {
-      if (hovering) hoverF = 0;
-      else hoverF += (1 - hoverF) * Math.min(1, dt * 4);
-
-      if (Math.abs(dragVel) > 0.015) { base += dragVel; dragVel *= 0.94; }
-      else dragVel = 0;
-      base += SPEED * dt * hoverF;
-    }
-
-    // Only touch the DOM when something actually moved.
-    if (base !== lastBase || hoverEl !== lastHover) {
-      place();
-      lastBase = base;
-      lastHover = hoverEl;
-    }
+    base += SPEED * dt;
+    if (base !== lastBase) { place(); lastBase = base; }
     raf = requestAnimationFrame(frame);
   }
 
@@ -445,59 +414,7 @@ const Lightbox = (function lightbox() {
     place();
   }
 
-  // pointer: drag to scrub, tap to open
-  wrap.addEventListener('pointerdown', (e) => {
-    dragging = true; travelled = 0; lastX = e.clientX; dragVel = 0;
-    setHover(null);
-    wrap.classList.add('is-dragging');
-    wrap.setPointerCapture(e.pointerId);
-  });
-  wrap.addEventListener('pointermove', (e) => {
-    if (!dragging) return;
-    const dx = e.clientX - lastX;
-    lastX = e.clientX;
-    travelled += Math.abs(dx);
-    const step = -dx * DRAG;
-    base += step;
-    dragVel = step;
-    place();
-  });
-  const endDrag = (e) => {
-    if (!dragging) return;
-    dragging = false;
-    wrap.classList.remove('is-dragging');
-    try { wrap.releasePointerCapture(e.pointerId); } catch { /* already released */ }
-  };
-  wrap.addEventListener('pointerup', endDrag);
-  wrap.addEventListener('pointercancel', endDrag);
-
-  // Touch taps can emit mouseenter, which would freeze the belt for good on a
-  // phone — so hover pausing is limited to devices with a real pointer.
-  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-  wrap.addEventListener('mouseenter', () => { if (canHover) hovering = true; });
-  wrap.addEventListener('mouseleave', () => { hovering = false; setHover(null); });
-
-  // delegated, so a tile moving under a stationary cursor is still tracked
-  wrap.addEventListener('pointerover', (e) => {
-    if (!canHover || e.pointerType === 'touch' || dragging) return;
-    hovering = true;
-    setHover(e.target.closest('.reel__item'));
-  });
-  wrap.addEventListener('pointerout', (e) => {
-    if (e.pointerType === 'touch') return;
-    const to = e.relatedTarget;
-    if (!to || !to.closest || !to.closest('.reel__item')) setHover(null);
-  });
-
-  stage.addEventListener('click', (e) => {
-    const btn = e.target.closest('.reel__item');
-    if (!btn || travelled > 6) return;
-    Lightbox?.open(REEL, Number(btn.dataset.idx) || 0, btn);
-  });
-
   rebuildIfNeeded();
-  if (hint) hint.hidden = false;
 
   // Run straight away; the observer below only pauses it when it scrolls out
   // of view. Never gate starting on the observer firing.

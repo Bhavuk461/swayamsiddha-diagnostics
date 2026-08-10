@@ -107,10 +107,25 @@ body::after{
     radial-gradient(120% 90% at 50% 42%, #f6f8f0 0%, var(--paper) 58%, #dee5d3 100%);
   color:var(--logo);
 }
-.boot.is-out{ animation:bootOut .58s var(--ease) forwards }
+/* The logo lifts away first, then the sheet dissolves — so the site fades up
+   underneath instead of appearing all at once. */
+.boot.is-out{ animation:bootOut .82s cubic-bezier(.4,0,.2,1) .12s forwards }
 @keyframes bootOut{
-  to{ opacity:0; transform:scale(1.06); visibility:hidden }
+  from{ opacity:1; transform:scale(1) }
+  to{ opacity:0; transform:scale(1.03); visibility:hidden }
 }
+.boot.is-out .boot__stage{ animation:bootStageOut .46s var(--ease) forwards }
+@keyframes bootStageOut{
+  to{ opacity:0; transform:translateY(-8px) scale(.97) }
+}
+
+/* page underneath comes up with it */
+body.is-booting .nav,
+body.is-booting main,
+body.is-booting .foot{ opacity:0 }
+body.has-booted .nav,
+body.has-booted main,
+body.has-booted .foot{ opacity:1; transition:opacity .9s cubic-bezier(.4,0,.2,1) }
 .boot__stage{ display:grid; justify-items:center; gap:20px; padding:24px }
 
 .boot__mark{ width:clamp(132px,26vw,178px); height:auto; overflow:visible }
@@ -171,7 +186,11 @@ body::after{
 
 @media (prefers-reduced-motion:reduce){
   .b-petal,.b-crown,.b-pearl,.boot__word span,.boot__sub{ animation:none }
-  .boot.is-out{ animation:none; opacity:0; visibility:hidden; transition:opacity .2s }
+  .boot.is-out,.boot.is-out .boot__stage{ animation:none }
+  .boot.is-out{ opacity:0; visibility:hidden; transition:opacity .25s }
+  body.has-booted .nav,
+  body.has-booted main,
+  body.has-booted .foot{ transition:opacity .25s }
 }
 
 /* ============================================================
@@ -386,64 +405,39 @@ body::after{
 .hero__badge-v{ font-family:var(--f-display); font-size:15px; font-weight:600; color:var(--forest) }
 
 /* ============================================================
-   BAND — curved photo reel sitting above the fact ticker.
-   The two share one surface so they read as a single transition
-   out of the hero rather than two stacked marquees.
+   BELT — photos riding a looping path, closing the "how it works"
+   section before the dark equipment section. Decorative only:
+   no pointer interaction of any kind.
    ============================================================ */
-.band{
+/* background lives on the wrapper so the mask fades only the tiles */
+.belt{
   background:var(--paper-2);
-  border-block:1px solid var(--line-2);
   overflow:hidden;
+  pointer-events:none;
+  padding-bottom:clamp(20px,3.5vw,44px);
 }
-
-/* offset-path only accepts px, so the curve, the tile size and the number of
-   tiles are all generated from the live width in JS — no fixed stage to scale,
-   which keeps the tiles the same physical size at every viewport. */
 .reel{
   position:relative; width:100%;
-  touch-action:pan-y;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
 }
 .reel__stage{ position:absolute; inset:0 }
 .reel__item{
-  position:absolute; top:0; left:0; padding:0;
+  position:absolute; top:0; left:0;
   border:1px solid rgba(8,22,14,.12); border-radius:6px;
-  background:var(--card); overflow:hidden; cursor:grab;
+  background:var(--card); overflow:hidden;
   offset-rotate:auto;              /* tiles bank into the curve */
   will-change:offset-distance; backface-visibility:hidden;
   box-shadow:0 14px 26px -18px rgba(4,51,26,.7);
-  /* no overshoot — a spring here visibly bounces if hover ever re-triggers */
-  transition:scale .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
 }
-.reel__item img{ width:100%; height:100%; object-fit:cover; pointer-events:none; user-select:none }
-/* Driven by JS, not :hover, so the lift and the stacking order can never
-   disagree — the tile that grows is always the tile that is on top. */
-.reel__item.is-hot,.reel__item:focus-visible{
-  scale:1.32; border-color:rgba(10,107,44,.4);
-  box-shadow:0 26px 44px -22px rgba(4,51,26,.8);
-}
-.reel.is-dragging .reel__item{ cursor:grabbing; transition:none; scale:1 }
-
-.reel__hint{
-  text-align:center; font-size:12.5px; letter-spacing:.01em;
-  color:var(--ink-3); font-weight:500; padding:2px 20px 16px;
-}
-
-@media (prefers-reduced-motion:reduce){
-  .reel__item{ transition:none }
-}
-
-@media (max-width:700px){
-  .reel__hint{ font-size:12px }
-}
+.reel__item img{ width:100%; height:100%; object-fit:cover; user-select:none }
 
 /* ============================================================
    TICKER
    ============================================================ */
 .ticker{
-  border-top:1px solid var(--line-2);
-  background:transparent;
+  border-block:1px solid var(--line-2);
+  background:var(--paper-2);
   overflow:hidden; padding:14px 0;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
@@ -643,13 +637,17 @@ body::after{
 /* ============================================================
    TECHNOLOGY (dark)
    ============================================================ */
+/* This section runs black. Re-scoping the on-dark variables here keeps the
+   change inside it — the visit section and footer keep their forest green. */
 .tech{
+  --d-ink:#ffffff;
+  --d-ink-2:rgba(255,255,255,.6);
+  --d-line:rgba(255,255,255,.13);
   padding:clamp(70px,9vw,124px) 0;
   background:
-    radial-gradient(80% 50% at 8% 0%, rgba(47,158,85,.14), transparent 60%),
-    radial-gradient(60% 46% at 96% 30%, rgba(180,131,31,.08), transparent 62%),
-    linear-gradient(178deg,var(--forest) 0%,var(--forest-2) 100%);
-  color:var(--d-ink);
+    radial-gradient(120% 70% at 50% -15%, #1a1c1d 0%, transparent 62%),
+    linear-gradient(180deg,#0b0c0c 0%,#000 100%);
+  color:#fff;
 }
 .rig{
   display:grid; grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
@@ -661,8 +659,8 @@ body::after{
 .rig--flip .rig__media{ order:2 }
 .rig__media{
   border-radius:var(--r-lg); overflow:hidden; border:1px solid var(--d-line);
-  box-shadow:0 40px 70px -50px rgba(0,0,0,.9);
-  aspect-ratio:4/3; background:#08281a;
+  box-shadow:0 40px 70px -50px #000;
+  aspect-ratio:4/3; background:#141414;
 }
 .rig__media img{ width:100%; height:100%; object-fit:cover; transition:transform 1s var(--ease) }
 .rig:hover .rig__media img{ transform:scale(1.035) }
@@ -695,7 +693,7 @@ body::after{
 .vs__lede{ margin-top:10px; color:var(--d-ink-2); font-size:16px; max-width:58ch }
 .vs__cols{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:26px }
 .vs__col{ border:1px solid var(--d-line); border-radius:var(--r); padding:22px 22px 24px }
-.vs__col--old{ background:rgba(0,0,0,.16) }
+.vs__col--old{ background:rgba(255,255,255,.03) }
 .vs__col--new{ background:linear-gradient(170deg,rgba(47,158,85,.16),rgba(47,158,85,.05)); border-color:rgba(47,158,85,.4) }
 .vs__tag{
   font-size:11.5px; letter-spacing:.15em; text-transform:uppercase; font-weight:700;
