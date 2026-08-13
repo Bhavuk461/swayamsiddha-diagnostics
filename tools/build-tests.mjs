@@ -178,9 +178,10 @@ for (const [name, tag] of sorted) {
 const letters = [...groups.keys()];
 
 let out = '';
-out += `      <div class="dir__rail" role="group" aria-label="Jump to letter">\n`;
+out += `      <div class="dir__rail" role="group" aria-label="Filter by letter">\n`;
+out += `        <a class="dir__letter dir__letter--all is-active" href="#test-directory" data-letter="" aria-pressed="true">All</a>\n`;
 for (const L of letters) {
-  out += `        <a class="dir__letter" href="#dir-${L}" data-letter="${L}">${L}</a>\n`;
+  out += `        <a class="dir__letter" href="#dir-${L}" data-letter="${L}" aria-pressed="false">${L}</a>\n`;
 }
 out += `      </div>\n\n`;
 

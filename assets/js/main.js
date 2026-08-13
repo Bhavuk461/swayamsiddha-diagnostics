@@ -287,8 +287,13 @@ const Lightbox = (function lightbox() {
   const model = rows.map((row) => {
     const el = $('.dir__name', row);
     const text = el.textContent;
+    const group = row.closest('.dir__group');
     // the alias words are searched but never displayed
-    return { row, el, text, key: norm(text) + ' ' + norm(row.dataset.alt || '') };
+    return {
+      row, el, text,
+      letter: group ? group.id.replace('dir-', '') : '',
+      key: norm(text) + ' ' + norm(row.dataset.alt || ''),
+    };
   });
   const TOTAL = model.length;
 
@@ -316,38 +321,114 @@ const Lightbox = (function lightbox() {
     );
   }
 
-  function apply() {
-    const term = norm(input.value);
-    let shown = 0;
+  const OUT_MS = 220;
+  let active = '';   // selected letter, '' means all
+  let pass = 0;      // cancels the timers of a superseded filter
 
-    for (const entry of model) {
-      const hit = !term || entry.key.includes(term);
-      entry.row.classList.toggle('is-off', !hit);
-      if (hit) { shown++; highlight(entry, term); }
-    }
-
+  function settle(term) {
     for (const g of groups) {
-      const any = !!g.querySelector('.dir__row:not(.is-off)');
-      g.classList.toggle('is-off', !any);
+      g.classList.toggle('is-off', !g.querySelector('.dir__row:not(.is-off):not(.is-out)'));
     }
     for (const l of letters) {
-      const g = document.getElementById(`dir-${l.dataset.letter}`);
-      l.classList.toggle('is-off', !g || g.classList.contains('is-off'));
+      const L = l.dataset.letter;
+      if (!L) { l.classList.remove('is-off'); continue; }
+      // a letter stays available if anything under it survives the search
+      const g = document.getElementById(`dir-${L}`);
+      const any = !term || (g && [...g.querySelectorAll('.dir__row')].some((r) => !r.dataset.miss));
+      l.classList.toggle('is-off', !any);
     }
-
-    count.textContent = term
-      ? `${shown} of ${TOTAL} tests`
-      : `${TOTAL} tests`;
-    empty.hidden = shown !== 0;
-    clear.hidden = !input.value;
   }
 
-  input.addEventListener('input', apply);
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { input.value = ''; apply(); }
+  function apply({ animate = true } = {}) {
+    const term = norm(input.value);
+    const run = ++pass;
+    let shown = 0;
+    let order = 0;
+
+    for (const entry of model) {
+      const hit = (!term || entry.key.includes(term)) && (!active || entry.letter === active);
+      entry.row.dataset.miss = term && !entry.key.includes(term) ? '1' : '';
+      const wasOff = entry.row.classList.contains('is-off');
+
+      if (hit) {
+        shown++;
+        highlight(entry, term);
+        entry.row.classList.remove('is-out');
+        if (wasOff) {
+          entry.row.classList.remove('is-off');
+          if (animate) {
+            entry.row.style.setProperty('--i', String(Math.min(order++, 14)));
+            entry.row.classList.remove('is-in');
+            void entry.row.offsetWidth;         // restart the animation
+            entry.row.classList.add('is-in');
+          }
+        }
+      } else if (!wasOff) {
+        if (animate) entry.row.classList.add('is-out');
+        else entry.row.classList.add('is-off');
+      }
+    }
+
+    count.textContent = shown === TOTAL ? `${TOTAL} tests` : `${shown} of ${TOTAL} tests`;
+    empty.hidden = shown !== 0;
+    clear.hidden = !input.value;
+
+    if (!animate) { settle(term); return; }
+
+    // let the outgoing rows finish fading up before taking them out of flow
+    setTimeout(() => {
+      if (run !== pass) return;
+      for (const entry of model) {
+        if (entry.row.classList.contains('is-out')) {
+          entry.row.classList.remove('is-out');
+          entry.row.classList.add('is-off');
+        }
+      }
+      settle(term);
+    }, OUT_MS);
+  }
+
+  function setLetter(L) {
+    active = active === L ? '' : L;          // clicking the active letter clears it
+    for (const l of letters) {
+      const on = (l.dataset.letter || '') === active;
+      l.classList.toggle('is-active', on);
+      l.setAttribute('aria-pressed', String(on));
+    }
+    if (active) { input.value = ''; }        // a letter and a search would fight
+    apply();
+  }
+
+  // drop the entry class once it has played, so nothing carries a stale animation
+  $('#dir-groups')?.addEventListener('animationend', (e) => {
+    if (e.animationName === 'dirRowIn') e.target.classList.remove('is-in');
   });
-  clear.addEventListener('click', () => { input.value = ''; apply(); input.focus(); });
-  apply();
+
+  for (const l of letters) {
+    l.addEventListener('click', (e) => {
+      e.preventDefault();
+      setLetter(l.dataset.letter || '');
+      // shrinking the list can strand the viewport below the content
+      $('.dir__tools')?.scrollIntoView({ block: 'start' });
+    });
+  }
+
+  const clearLetter = () => {
+    if (!active) return;
+    active = '';
+    for (const l of letters) {
+      const on = !l.dataset.letter;
+      l.classList.toggle('is-active', on);
+      l.setAttribute('aria-pressed', String(on));
+    }
+  };
+
+  input.addEventListener('input', () => { clearLetter(); apply(); });
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { input.value = ''; clearLetter(); apply(); }
+  });
+  clear.addEventListener('click', () => { input.value = ''; clearLetter(); apply(); input.focus(); });
+  apply({ animate: false });
 })();
 
 /* ------------------------------------------------------------------

@@ -45,7 +45,12 @@
 
 *,*::before,*::after{ box-sizing:border-box }
 
-html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; scroll-padding-top:88px }
+html{
+  -webkit-text-size-adjust:100%; scroll-behavior:smooth; scroll-padding-top:88px;
+  /* clip, not hidden — hidden here would make the page a scroll container and
+     kill position:sticky on the header and the directory letter rail */
+  overflow-x:clip;
+}
 
 body{
   margin:0;
@@ -57,6 +62,7 @@ body{
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
   overflow-x:hidden;
+  overflow-x:clip;      /* wins where supported; hidden stays as the fallback */
 }
 body.is-locked{ overflow:hidden }
 
@@ -633,6 +639,11 @@ body.has-booted .foot{ opacity:1; transition:opacity .9s cubic-bezier(.4,0,.2,1)
 }
 .dir__letter:hover{ background:var(--brand); border-color:var(--brand); color:#fff }
 .dir__letter.is-off{ opacity:.3; pointer-events:none }
+.dir__letter.is-active{
+  background:var(--brand); border-color:var(--brand); color:#fff;
+  box-shadow:0 6px 14px -8px rgba(4,51,26,.7);
+}
+.dir__letter--all{ min-width:46px; letter-spacing:.06em }
 
 .dir__groups{
   columns:3; column-gap:clamp(26px,3.2vw,54px);
@@ -657,6 +668,27 @@ body.has-booted .foot{ opacity:1; transition:opacity .9s cubic-bezier(.4,0,.2,1)
 }
 .dir__row:hover{ background:var(--card); color:var(--ink) }
 .dir__row.is-off{ display:none }
+
+/* Filtering: rows on their way out fade upward, rows arriving rise into place.
+   display cannot be transitioned, so JS holds the row until the animation ends
+   and only then takes it out of flow. */
+.dir__row.is-out{
+  animation:dirRowOut .22s var(--ease) forwards;
+  pointer-events:none;
+}
+@keyframes dirRowOut{
+  to{ opacity:0; transform:translateY(-10px) }
+}
+.dir__row.is-in{
+  animation:dirRowIn .34s var(--ease) backwards;
+  animation-delay:calc(var(--i,0) * 14ms);
+}
+@keyframes dirRowIn{
+  from{ opacity:0; transform:translateY(10px) }
+}
+@media (prefers-reduced-motion:reduce){
+  .dir__row.is-out,.dir__row.is-in{ animation:none }
+}
 .dir__name{ flex:1 }
 .dir__name mark{
   background:rgba(180,131,31,.24); color:inherit;
