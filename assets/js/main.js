@@ -269,6 +269,88 @@ const Lightbox = (function lightbox() {
 })();
 
 /* ------------------------------------------------------------------
+   Test directory — live search over the A–Z list, with the letter rail
+   and the group headings following whatever is left showing.
+   ------------------------------------------------------------------ */
+(function directory() {
+  const input = $('#dir-input');
+  const clear = $('#dir-clear');
+  const count = $('#dir-count');
+  const empty = $('#dir-empty');
+  const groups = $$('.dir__group');
+  const rows = $$('.dir__row');
+  const letters = $$('.dir__letter');
+  if (!input || !rows.length) return;
+
+  // normalise so "hba1c", "HbA1c" and "hb a1c" all find the same row
+  const norm = (s) => s.toLowerCase().replace(/[^a-z0-9%+]/g, '');
+  const model = rows.map((row) => {
+    const el = $('.dir__name', row);
+    const text = el.textContent;
+    // the alias words are searched but never displayed
+    return { row, el, text, key: norm(text) + ' ' + norm(row.dataset.alt || '') };
+  });
+  const TOTAL = model.length;
+
+  const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  function highlight(entry, term) {
+    if (!term) { entry.el.textContent = entry.text; return; }
+    // walk the raw text, matching against its normalised form so the marker
+    // lands correctly even across spaces and punctuation
+    const chars = [...entry.text];
+    const map = [];
+    let k = '';
+    chars.forEach((ch, i) => {
+      const n = norm(ch);
+      if (n) { k += n; map.push(i); }
+    });
+    const at = k.indexOf(term);
+    if (at < 0) { entry.el.textContent = entry.text; return; }
+    const from = map[at];
+    const to = map[Math.min(at + term.length - 1, map.length - 1)];
+    entry.el.replaceChildren(
+      document.createTextNode(entry.text.slice(0, from)),
+      Object.assign(document.createElement('mark'), { textContent: entry.text.slice(from, to + 1) }),
+      document.createTextNode(entry.text.slice(to + 1))
+    );
+  }
+
+  function apply() {
+    const term = norm(input.value);
+    let shown = 0;
+
+    for (const entry of model) {
+      const hit = !term || entry.key.includes(term);
+      entry.row.classList.toggle('is-off', !hit);
+      if (hit) { shown++; highlight(entry, term); }
+    }
+
+    for (const g of groups) {
+      const any = !!g.querySelector('.dir__row:not(.is-off)');
+      g.classList.toggle('is-off', !any);
+    }
+    for (const l of letters) {
+      const g = document.getElementById(`dir-${l.dataset.letter}`);
+      l.classList.toggle('is-off', !g || g.classList.contains('is-off'));
+    }
+
+    count.textContent = term
+      ? `${shown} of ${TOTAL} tests`
+      : `${TOTAL} tests`;
+    empty.hidden = shown !== 0;
+    clear.hidden = !input.value;
+  }
+
+  input.addEventListener('input', apply);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { input.value = ''; apply(); }
+  });
+  clear.addEventListener('click', () => { input.value = ''; apply(); input.focus(); });
+  apply();
+})();
+
+/* ------------------------------------------------------------------
    Photo reel — the gallery photos ride a curved offset-path under the
    hero. Items are laid out at even offsets along the path and a single
    shared position is advanced each frame, so the reel loops seamlessly.

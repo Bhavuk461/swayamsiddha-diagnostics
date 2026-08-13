@@ -575,6 +575,129 @@ body.has-booted .foot{ opacity:1; transition:opacity .9s cubic-bezier(.4,0,.2,1)
 .notice strong{ color:var(--ink) }
 
 /* ============================================================
+   TEST DIRECTORY — the full A–Z list, searchable
+   ============================================================ */
+.dir{ padding:clamp(64px,8vw,116px) 0; background:var(--paper-2) }
+
+.dir__tools{
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  margin-bottom:22px;
+}
+.dir__search{
+  position:relative; flex:1 1 340px; max-width:520px;
+  display:flex; align-items:center;
+}
+.dir__search > svg{
+  position:absolute; left:18px; width:18px; height:18px;
+  color:var(--ink-3); pointer-events:none;
+}
+.dir__search input{
+  width:100%; height:54px; padding:0 46px 0 48px;
+  border:1px solid var(--line); border-radius:999px;
+  background:var(--card); color:var(--ink);
+  font-family:inherit; font-size:15.5px;
+  transition:border-color .22s var(--ease), box-shadow .22s var(--ease);
+  -webkit-appearance:none; appearance:none;
+}
+.dir__search input::-webkit-search-cancel-button{ display:none }
+.dir__search input::placeholder{ color:var(--ink-3) }
+.dir__search input:focus{
+  outline:none; border-color:var(--brand);
+  box-shadow:0 0 0 4px rgba(10,107,44,.11);
+}
+.dir__clear{
+  position:absolute; right:12px; width:30px; height:30px;
+  display:grid; place-items:center; border:0; border-radius:50%;
+  background:var(--mint); color:var(--forest); cursor:pointer;
+}
+.dir__clear svg{ width:15px; height:15px }
+.dir__count{
+  font-size:12.5px; letter-spacing:.13em; text-transform:uppercase;
+  font-weight:600; color:var(--ink-3);
+}
+
+/* letter rail — sticks under the header while you scan the list */
+.dir__rail{
+  position:sticky; top:78px; z-index:20;
+  display:flex; flex-wrap:wrap; gap:5px;
+  padding:10px 0 12px; margin-bottom:12px;
+  background:linear-gradient(180deg,var(--paper-2) 72%,rgba(242,245,234,0));
+}
+.dir__letter{
+  min-width:31px; height:31px; padding:0 5px;
+  display:grid; place-items:center; border-radius:9px;
+  font-size:12.5px; font-weight:700; letter-spacing:.04em;
+  color:var(--ink-2); text-decoration:none;
+  border:1px solid var(--line-2); background:var(--card);
+  transition:background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+}
+.dir__letter:hover{ background:var(--brand); border-color:var(--brand); color:#fff }
+.dir__letter.is-off{ opacity:.3; pointer-events:none }
+
+.dir__groups{
+  columns:3; column-gap:clamp(26px,3.2vw,54px);
+}
+.dir__group{ margin:0 0 26px; break-inside:auto }
+.dir__group.is-off{ display:none }
+.dir__initial{
+  display:flex; align-items:center; gap:12px;
+  font-size:26px; font-weight:600; color:var(--brand);
+  margin:0 0 6px; break-after:avoid; line-height:1;
+}
+.dir__initial::after{
+  content:""; flex:1; height:1px; background:var(--line);
+}
+.dir__list{ list-style:none; margin:0; padding:0 }
+.dir__row{
+  display:flex; align-items:baseline; gap:10px;
+  padding:8px 4px; border-bottom:1px solid var(--line-2);
+  font-size:14.8px; color:var(--ink-2); line-height:1.4;
+  break-inside:avoid;
+  transition:background .18s var(--ease), color .18s var(--ease);
+}
+.dir__row:hover{ background:var(--card); color:var(--ink) }
+.dir__row.is-off{ display:none }
+.dir__name{ flex:1 }
+.dir__name mark{
+  background:rgba(180,131,31,.24); color:inherit;
+  border-radius:3px; padding:0 1px;
+}
+.dir__tag{
+  flex:none; font-size:9px; font-weight:700; letter-spacing:.11em;
+  padding:3px 7px; border-radius:999px; line-height:1;
+  transform:translateY(-1px);
+}
+.dir__tag--kit{ background:var(--mint); color:var(--brand-700); border:1px solid rgba(10,107,44,.16) }
+.dir__tag--o{ background:var(--amber-2); color:var(--amber); border:1px solid rgba(180,131,31,.28) }
+
+.dir__empty{
+  padding:34px 4px; font-size:16px; color:var(--ink-2);
+}
+.dir__empty a{ color:var(--brand); font-weight:600 }
+
+.dir__legend{
+  display:flex; flex-wrap:wrap; gap:8px 26px;
+  margin-top:10px; padding-top:20px; border-top:1px solid var(--line-2);
+  font-size:13px; color:var(--ink-3);
+}
+.dir__legend span{ display:flex; align-items:center; gap:8px }
+
+@media (max-width:1000px){ .dir__groups{ columns:2 } }
+@media (max-width:620px){
+  .dir__groups{ columns:1 }
+  .dir__tools{ gap:10px }
+  /* one scrollable row rather than two wrapped ones — a wrapped rail plus the
+     header would pin ~157px of a phone screen open the whole way down */
+  .dir__rail{
+    top:68px; flex-wrap:nowrap; overflow-x:auto;
+    scrollbar-width:none; -ms-overflow-style:none;
+    padding-right:16px;
+  }
+  .dir__rail::-webkit-scrollbar{ display:none }
+  .dir__letter{ flex:none }
+}
+
+/* ============================================================
    HOW IT WORKS
    ============================================================ */
 .flow{ padding:clamp(64px,8vw,116px) 0; background:var(--paper-2) }
